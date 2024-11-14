@@ -33,9 +33,9 @@ android {
 
 dependencies {
 
-    testImplementation(projects.core)
+    testImplementation(projects.framework)
     testImplementation(projects.paparazzi)
-    implementation(projects.common)
+    implementation(projects.annotations)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

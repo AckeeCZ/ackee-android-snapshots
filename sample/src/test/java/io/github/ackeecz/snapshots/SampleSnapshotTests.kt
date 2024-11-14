@@ -3,11 +3,11 @@ package io.github.ackeecz.snapshots
 import android.content.Context
 import androidx.compose.runtime.Composable
 import com.airbnb.android.showkase.models.Showkase
-import io.github.ackeecz.snapshots.common.PreviewSnapshotStrategy
-import io.github.ackeecz.snapshots.core.Device
-import io.github.ackeecz.snapshots.core.FontScale
-import io.github.ackeecz.snapshots.core.SnapshotStrategy
-import io.github.ackeecz.snapshots.core.UiTheme
+import io.github.ackeecz.snapshots.annotations.PreviewSnapshotStrategy
+import io.github.ackeecz.snapshots.framework.Device
+import io.github.ackeecz.snapshots.framework.FontScale
+import io.github.ackeecz.snapshots.framework.SnapshotStrategy
+import io.github.ackeecz.snapshots.framework.UiTheme
 import io.github.ackeecz.snapshots.paparazzi.PaparazziSnapshotTests
 import io.github.ackeecz.snapshots.ui.theme.SnapshotsSampleTheme
 

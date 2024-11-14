@@ -11,7 +11,6 @@ dependencies {
 
 gradlePlugin {
     plugins {
-
         plugin(
             dependency = libs.plugins.ackeecz.snapshots.android.application,
             pluginName = "AndroidApplicationConventionPlugin",

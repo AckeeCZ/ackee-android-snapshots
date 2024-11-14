@@ -26,6 +26,6 @@ enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 includeBuild("build-logic")
 
 include(":sample")
-include(":core")
+include(":framework")
 include(":paparazzi")
-include(":common")
+include(":annotations")

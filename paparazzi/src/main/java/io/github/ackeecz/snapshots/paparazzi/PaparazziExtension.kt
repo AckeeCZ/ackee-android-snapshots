@@ -1,8 +1,8 @@
 package io.github.ackeecz.snapshots.paparazzi
 
 import app.cash.paparazzi.Paparazzi
-import io.kotest.core.listeners.AfterTestListener
-import io.kotest.core.listeners.BeforeTestListener
+import io.kotest.core.listeners.AfterEachListener
+import io.kotest.core.listeners.BeforeEachListener
 import io.kotest.core.test.TestCase
 import io.kotest.core.test.TestResult
 import org.junit.runner.Description
@@ -13,9 +13,9 @@ import org.junit.runners.model.Statement
  */
 class PaparazziExtension(
     private val paparazzi: Paparazzi
-) : BeforeTestListener, AfterTestListener {
+) : BeforeEachListener, AfterEachListener {
 
-    override suspend fun beforeTest(testCase: TestCase) {
+    override suspend fun beforeEach(testCase: TestCase) {
         val junit4Description = testCase.junit4Description
         paparazzi.apply(
             base = NoopJunitStatement,
@@ -24,7 +24,7 @@ class PaparazziExtension(
         paparazzi.prepare(junit4Description)
     }
 
-    override suspend fun afterTest(testCase: TestCase, result: TestResult) {
+    override suspend fun afterEach(testCase: TestCase, result: TestResult) {
         paparazzi.close()
     }
 }

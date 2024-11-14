@@ -22,11 +22,25 @@ class PublishingConventionPlugin : Plugin<Project> {
         extensions.configure<MavenPublishBaseExtension> {
             val commonLibProperties = Properties().apply { load(file("${rootDir.absolutePath}/lib.properties").inputStream()) }
             val moduleLibProperties = Properties().apply { load(file("${projectDir.absolutePath}/lib.properties").inputStream()) }
-
+            // include versions of compose and paparazzi in particular modules
+            val versionSuffix = when (name) {
+                "framework" -> libs.versions.composeBom.get()
+                "paparazzi" -> libs.versions.paparazzi.get()
+                else -> null
+            }
+            val groupId = commonLibProperties.getProperty("GROUP")
+            val artifactId = "${commonLibProperties.getProperty("ARTIFACT_BASE_NAME")}-$name"
+            val version = buildString {
+                append(commonLibProperties.getProperty("VERSION_NAME"))
+                if (versionSuffix != null) {
+                    append("-$versionSuffix")
+                }
+            }
+            println("Publishing $groupId:$artifactId:$version")
             coordinates(
-                groupId = commonLibProperties.getProperty("GROUP"),
-                artifactId = "${commonLibProperties.getProperty("ARTIFACT_BASE_NAME")}-$name",
-                version = commonLibProperties.getProperty("VERSION_NAME")
+                groupId = groupId,
+                artifactId = artifactId,
+                version = version
             )
 
             pom {
@@ -54,9 +68,10 @@ class PublishingConventionPlugin : Plugin<Project> {
                     connection.set(commonLibProperties.getProperty("POM_SCM_CONNECTION"))
                     developerConnection.set(commonLibProperties.getProperty("POM_SCM_DEVELOPER_CONNECTION"))
                 }
-                // exclude compose and paparazzi since these are very unstable when used together with incorrect
+                // exclude compose, paparazzi and kotlin since these are very unstable when used together with incorrect
                 // version so move this responsibility to callers
                 withXml {
+                    // remove kotlin, paparazzi and compose from dependencies
                     val dependencies = ((asNode().get("dependencies") as NodeList)[0] as Node).children() as NodeList
                     dependencies.removeAll { dep ->
                         val node = dep as Node
@@ -66,8 +81,8 @@ class PublishingConventionPlugin : Plugin<Project> {
                         groupId?.contains("androidx") == true ||
                             groupId == "app.cash.paparazzi" ||
                             groupId == "org.jetbrains.kotlin"
-
                     }
+                    // remove compose bom from dependency management
                     val dependencyManagementDependenciesNode =
                         ((asNode().get("dependencyManagement") as? NodeList)?.getOrNull(0) as? Node)?.children() as? NodeList
                     val dependencyManagementDependencies = (dependencyManagementDependenciesNode?.getOrNull(0) as? Node)?.children()

@@ -6,14 +6,12 @@ plugins {
     alias(libs.plugins.ackeecz.snapshots.publishing)
 }
 
+
 android {
-    namespace = "io.github.ackeecz.snapshots.paparazzi"
+    namespace = "io.github.ackeecz.snapshots.framework"
 }
 
 dependencies {
-    implementation(projects.framework)
-
-    implementation(libs.paparazzi)
-    implementation(libs.kotest.framework.api)
     implementation(libs.showkase.core)
+    implementation(libs.kotest.framework.api)
 }

@@ -5,9 +5,9 @@ import androidx.compose.runtime.Composable
 import app.cash.paparazzi.DeviceConfig
 import app.cash.paparazzi.Paparazzi
 import com.android.ide.common.rendering.api.SessionParams
-import io.github.ackeecz.snapshots.core.Device
-import io.github.ackeecz.snapshots.core.SnapshotEngine
-import io.github.ackeecz.snapshots.core.SnapshotStrategy
+import io.github.ackeecz.snapshots.framework.Device
+import io.github.ackeecz.snapshots.framework.SnapshotEngine
+import io.github.ackeecz.snapshots.framework.SnapshotStrategy
 import io.kotest.core.spec.style.FunSpec
 
 class PaparazziEngine : SnapshotEngine {
