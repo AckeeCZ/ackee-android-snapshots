@@ -2,8 +2,8 @@ name: Deploy lib to Maven Central
 
 on:
   push:
-    tags:
-      - '*'
+    branches:
+      - 'main'
 
 jobs:
   build:
