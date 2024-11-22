@@ -28,8 +28,8 @@ jobs:
         env:
           GPG_KEY: ${{ secrets.ANDROID_GPG_KEY }}
           GPG_PASSWORD: ${{ secrets.ANDROID_SIGNING_PASSWORD }}
-          MAVEN_USERNAME: ${{ secrets.ANDROID_OSSRH_USERNAME }}
-          MAVEN_PASSWORD: ${{ secrets.ANDROID_OSSRH_PASSWORD }}
+          MAVEN_USERNAME: ${{ secrets.ANDROID_MAVEN_CENTRAL_USERNAME }}
+          MAVEN_PASSWORD: ${{ secrets.ANDROID_MAVEN_CENTRAL_PASSWORD }}
 
       - name: Prepare Slack notification message
         id: prepare_slack_message
