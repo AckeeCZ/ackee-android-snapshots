@@ -127,8 +127,10 @@ The library supports two main testing strategies:
     - Perfect for testing complete screens and layouts within a device frame
 
 To determine on a Preview level which strategy to use the predefined
-annotation metadata tag can be used along the `ShowkaseComposable` annotation which serves
-as a substitute for a @Preview annotation with some additional properties.
+annotation metadata tag can be used along the `ShowkaseComposable` annotation. Showkase collects
+both `@Preview` and `@ShowkaseComposable` methods, but only the latter can be used to specify the strategy.
+In the following example `@Preview` is used to render the component in Android Studio and `@ShowkaseComposable`
+for the snapshots.
 
 ```kotlin
 @Preview
