@@ -1,7 +1,7 @@
 # Ackee Android Snapshots
 
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
-[![Maven Central](https://img.shields.io/maven-central/v/io.github.ackeecz/snapshots-core)](https://central.sonatype.com/artifact/io.github.ackeecz/snapshots-core)
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.ackeecz/snapshots-framework)](https://central.sonatype.com/artifact/io.github.ackeecz/snapshots-framework)
 
 ## Overview
 
@@ -79,44 +79,38 @@ testImplementation(libs.ackee.snapshots.paparazzi)
 
 The library uses a versioning scheme that reflects compatibility with its core dependencies:
 
-### Core Module
+### Framework Module
 
-The core module version includes the Compose BOM version as a suffix:
-
+The framework module version includes the Compose BOM version as a suffix:
 ```
 {base_version}-{compose_bom_version}
 ```
 
-Example: `0.1.0-2024.10.00`
+Example: `0.1.0-2024.02.00`
 
 ### Paparazzi Module
-
 The Paparazzi module version includes the Paparazzi version as a suffix:
-
 ```
 {base_version}-{paparazzi_version}
 ```
 
-Example: `0.1.0-1.3.5`
+Example: `0.1.0-1.3.1`
 
-### Common Module
+### Annotations Module
 
-The common module uses only the base version without any suffix:
-
+The annotations module uses only the base version without any suffix:
 ```
 {base_version}
 ```
-
 Example: `0.1.0`
 
 This versioning strategy helps users:
-
 - Track compatibility with specific Compose and Paparazzi versions
 - Choose the right artifact version for their setup
 - Avoid version conflicts with their project's dependencies
 
-Note: The library intentionally does not set Compose or Paparazzi versions. You need to specify these versions in your project to ensure compatibility
-with your setup.
+Note: The library intentionally does not set Compose or Paparazzi versions to prevent version conflicts. You need to specify these versions in your
+project to ensure compatibility with your setup.
 
 ## Configuration
 
