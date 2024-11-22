@@ -20,7 +20,7 @@ jobs:
 
       - name: Publish to Maven Central
         run: |
-          ./gradlew --stacktrace --verbose publishAndReleaseToMavenCentral \
+          ./gradlew --stacktrace --debug publishAndReleaseToMavenCentral \
             -PsigningInMemoryKey=$GPG_KEY \
             -PsigningInMemoryKeyPassword=$GPG_PASSWORD \
             -PmavenCentralUsername=$MAVEN_USERNAME \
