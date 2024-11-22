@@ -1,3 +1,7 @@
+import io.github.ackeecz.snapshots.debugImplementation
+import io.github.ackeecz.snapshots.implementation
+import io.github.ackeecz.snapshots.libs
+
 plugins {
     alias(libs.plugins.ackeecz.snapshots.android.application)
     alias(libs.plugins.ackeecz.snapshots.compose)
@@ -37,6 +41,12 @@ dependencies {
     testImplementation(projects.paparazzi)
     implementation(projects.annotations)
 
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.ui)
+    debugImplementation(libs.androidx.ui.tooling)
+    implementation(libs.androidx.ui.tooling.preview)
+    implementation(libs.androidx.material3)
+    implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
 

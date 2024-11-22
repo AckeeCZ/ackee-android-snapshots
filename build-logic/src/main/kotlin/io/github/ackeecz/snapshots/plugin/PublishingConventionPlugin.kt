@@ -2,8 +2,6 @@ package io.github.ackeecz.snapshots.plugin
 
 import com.vanniktech.maven.publish.MavenPublishBaseExtension
 import com.vanniktech.maven.publish.SonatypeHost
-import groovy.util.Node
-import groovy.util.NodeList
 import io.github.ackeecz.snapshots.apply
 import io.github.ackeecz.snapshots.libs
 import org.gradle.api.Plugin
@@ -36,7 +34,7 @@ class PublishingConventionPlugin : Plugin<Project> {
                     append("-$versionSuffix")
                 }
             }
-            println("Publishing $groupId:$artifactId:$version")
+
             coordinates(
                 groupId = groupId,
                 artifactId = artifactId,
@@ -68,35 +66,9 @@ class PublishingConventionPlugin : Plugin<Project> {
                     connection.set(commonLibProperties.getProperty("POM_SCM_CONNECTION"))
                     developerConnection.set(commonLibProperties.getProperty("POM_SCM_DEVELOPER_CONNECTION"))
                 }
-                // exclude compose, paparazzi and kotlin since these are very unstable when used together with incorrect
-                // version so move this responsibility to callers
-                withXml {
-                    // remove kotlin, paparazzi and compose from dependencies
-                    val dependencies = ((asNode().get("dependencies") as NodeList)[0] as Node).children() as NodeList
-                    dependencies.removeAll { dep ->
-                        val node = dep as Node
-                        val groupId = (node.children() as List<Node>).find {
-                            it.name().toString().contains("groupId")
-                        }?.text()
-                        groupId?.contains("androidx") == true ||
-                            groupId == "app.cash.paparazzi" ||
-                            groupId == "org.jetbrains.kotlin"
-                    }
-                    // remove compose bom from dependency management
-                    val dependencyManagementDependenciesNode =
-                        ((asNode().get("dependencyManagement") as? NodeList)?.getOrNull(0) as? Node)?.children() as? NodeList
-                    val dependencyManagementDependencies = (dependencyManagementDependenciesNode?.getOrNull(0) as? Node)?.children()
-                    dependencyManagementDependencies?.removeAll { dep ->
-                        val node = dep as Node
-                        val groupId = (node.children() as List<Node>).find {
-                            it.name().toString().contains("groupId")
-                        }?.text()
-                        groupId?.contains("androidx") == true
-                    }
-                }
             }
 
-//            signAllPublications()
+            signAllPublications()
             publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
         }
     }

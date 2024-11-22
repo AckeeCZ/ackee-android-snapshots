@@ -1,9 +1,11 @@
-//import io.github.ackeecz.snapshots.publishing
+import io.github.ackeecz.snapshots.compileOnly
+import io.github.ackeecz.snapshots.implementation
+import io.github.ackeecz.snapshots.libs
 
 plugins {
     alias(libs.plugins.ackeecz.snapshots.android.library)
-    alias(libs.plugins.ackeecz.snapshots.compose)
     alias(libs.plugins.ackeecz.snapshots.publishing)
+    alias(libs.plugins.ackeecz.snapshots.compose)
 }
 
 
@@ -13,5 +15,9 @@ android {
 
 dependencies {
     implementation(libs.showkase.core)
+
+    compileOnly(platform(libs.androidx.compose.bom))
+    compileOnly(libs.androidx.ui)
+
     implementation(libs.kotest.framework.api)
 }

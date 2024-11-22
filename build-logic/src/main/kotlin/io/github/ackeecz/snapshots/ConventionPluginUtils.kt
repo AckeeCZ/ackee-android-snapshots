@@ -34,6 +34,10 @@ fun DependencyHandlerScope.implementation(dependencyNotation: Any) {
     add("implementation", dependencyNotation)
 }
 
+fun DependencyHandlerScope.compileOnly(dependencyNotation: Any) {
+    add("compileOnly", dependencyNotation)
+}
+
 fun DependencyHandlerScope.debugImplementation(dependencyNotation: Any) {
     add("debugImplementation", dependencyNotation)
 }

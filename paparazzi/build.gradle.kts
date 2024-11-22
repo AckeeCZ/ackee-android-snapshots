@@ -1,4 +1,5 @@
-//import io.github.ackeecz.snapshots.publishing
+import io.github.ackeecz.snapshots.implementation
+import io.github.ackeecz.snapshots.libs
 
 plugins {
     alias(libs.plugins.ackeecz.snapshots.android.library)
@@ -13,7 +14,9 @@ android {
 dependencies {
     implementation(projects.framework)
 
-    implementation(libs.paparazzi)
+    compileOnly(libs.paparazzi)
     implementation(libs.kotest.framework.api)
     implementation(libs.showkase.core)
+    compileOnly(platform(libs.androidx.compose.bom))
+    compileOnly(libs.androidx.ui)
 }
