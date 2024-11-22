@@ -1,7 +1,9 @@
+![ackee|Ackee Android Snapshots](imgs/cover.png)
+
 # Ackee Android Snapshots
 
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
-[![Maven Central](https://img.shields.io/maven-central/v/io.github.ackeecz/snapshots-framework)](https://central.sonatype.com/artifact/io.github.ackeecz/snapshots-framework)
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.ackeecz/snapshots-annotations)](https://central.sonatype.com/artifact/io.github.ackeecz/snapshots-annotations)
 
 ## Overview
 
