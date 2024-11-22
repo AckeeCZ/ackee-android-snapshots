@@ -18,16 +18,6 @@ jobs:
         with:
           java-version: '17'
 
-      - name: Prepare environment
-        run: |
-          git fetch --unshallow
-          sudo bash -c "echo '$GPG_PRIVATE_KEY' | base64 -d > key.gpg"
-          GPG_KEY=$(gpg --passphrase $GPG_PASSWORD --batch --yes --export-secret-keys --armor $SIGNING_KEY_ID key.gpg | grep -v '\-\-' | grep -v '^=.' | tr -d '\n')
-        env:
-          GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
-          GPG_PASSWORD: ${{ secrets.GPG_PASSPHRASE }}
-          SIGNING_KEY_ID: ${{ secrets.ANDROID_SIGNING_KEY_ID }}
-
       - name: Publish to Maven Central
         run: |
           ./gradlew publishAndReleaseToMavenCentral \
@@ -36,6 +26,8 @@ jobs:
             -PmavenCentralUsername=$MAVEN_USERNAME \
             -PmavenCentralPassword=$MAVEN_PASSWORD
         env:
+          GPG_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
+          SIGNING_KEY_ID: ${{ secrets.ANDROID_SIGNING_KEY_ID }}
           GPG_PASSWORD: ${{ secrets.GPG_PASSPHRASE }}
           MAVEN_USERNAME: ${{ secrets.ANDROID_OSSRH_USERNAME }}
           MAVEN_PASSWORD: ${{ secrets.ANDROID_OSSRH_PASSWORD }}
