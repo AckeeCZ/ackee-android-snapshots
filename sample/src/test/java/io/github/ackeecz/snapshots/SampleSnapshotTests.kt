@@ -5,6 +5,8 @@ import androidx.compose.runtime.Composable
 import com.airbnb.android.showkase.models.Showkase
 import io.github.ackeecz.snapshots.annotations.PreviewSnapshotStrategy
 import io.github.ackeecz.snapshots.framework.Device
+import io.github.ackeecz.snapshots.framework.DeviceConfig
+import io.github.ackeecz.snapshots.framework.DeviceOrientation
 import io.github.ackeecz.snapshots.framework.FontScale
 import io.github.ackeecz.snapshots.framework.SnapshotStrategy
 import io.github.ackeecz.snapshots.framework.UiTheme
@@ -45,13 +47,32 @@ class ComponentsSnapshotTests : PaparazziSnapshotTests(
     strategy = SnapshotStrategy.Component
 )
 
-class PhoneSnapshotTests : PaparazziSnapshotTests(
+class PortraitPhoneSnapshotTests : PaparazziSnapshotTests(
     before = before,
     fontScales = fontScales,
     showkasePreviews = screenPreviews,
     theme = theme,
     uiThemes = uiThemes,
-    strategy = SnapshotStrategy.Screen(Device.PIXEL_6),
+    strategy = SnapshotStrategy.Screen(
+        DeviceConfig(
+            device = Device.PIXEL_6,
+            orientation = DeviceOrientation.PORTRAIT
+        )
+    ),
+)
+
+class LandscapePhoneSnapshotTests : PaparazziSnapshotTests(
+    before = before,
+    fontScales = fontScales,
+    showkasePreviews = screenPreviews,
+    theme = theme,
+    uiThemes = uiThemes,
+    strategy = SnapshotStrategy.Screen(
+        DeviceConfig(
+            device = Device.PIXEL_6,
+            orientation = DeviceOrientation.LANDSCAPE
+        )
+    ),
 )
 
 class TabletSnapshotTests : PaparazziSnapshotTests(
@@ -60,5 +81,10 @@ class TabletSnapshotTests : PaparazziSnapshotTests(
     showkasePreviews = screenPreviews,
     theme = theme,
     uiThemes = uiThemes,
-    strategy = SnapshotStrategy.Screen(Device.NEXUS_10),
+    strategy = SnapshotStrategy.Screen(
+        DeviceConfig(
+            device = Device.NEXUS_10,
+            orientation = DeviceOrientation.LANDSCAPE
+        )
+    ),
 )

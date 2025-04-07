@@ -11,7 +11,7 @@ import io.github.ackeecz.snapshots.ui.theme.SnapshotsSampleTheme
 
 @Composable
 fun PrimaryButton(modifier: Modifier = Modifier, text: String, onClick: () -> Unit) {
-    Button(onClick = onClick) {
+    Button(modifier = modifier, onClick = onClick) {
         Text(text = text)
     }
 }

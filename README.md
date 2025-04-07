@@ -23,6 +23,7 @@ The framework is designed with extensibility in mind, using a modular architectu
 
 - Automated snapshot testing for Jetpack Compose components
 - Support for different device configurations (Phone/Tablet)
+- Support for different device orientations (Portrait/Landscape)
 - Dark/Light theme testing
 - Font scale testing
 - Component and full-screen testing strategies
@@ -124,8 +125,9 @@ The library supports two main testing strategies:
     - Ideal for testing individual UI components
 
 2. Screen Testing (`SnapshotStrategy.Screen`):
-    - Screens are rendered within the full frame of the selected device
-    - Snapshots are taken for all configured devices
+    - Screens are rendered within the full frame of the selected device configuration
+    - Device configuration includes both device type and orientation
+    - Snapshots are taken for all configured device configurations
     - Perfect for testing complete screens and layouts within a device frame
 
 To determine on a Preview level which strategy to use the predefined
@@ -191,24 +193,49 @@ class ComponentsSnapshotTests : PaparazziSnapshotTests(
     strategy = SnapshotStrategy.Component
 )
 
-// Phone screen snapshots
-class PhoneSnapshotTests : PaparazziSnapshotTests(
+// Portrait phone screen snapshots
+class PortraitPhoneSnapshotTests : PaparazziSnapshotTests(
     before = before,
     fontScales = fontScales,
     showkasePreviews = screenPreviews,
     theme = theme,
     uiThemes = uiThemes,
-    strategy = SnapshotStrategy.Screen(Device.PIXEL_6)
+    strategy = SnapshotStrategy.Screen(
+        DeviceConfig(
+            device = Device.PIXEL_6,
+            orientation = DeviceOrientation.PORTRAIT
+        )
+    )
 )
 
-// Tablet screen snapshots
+// Landscape phone screen snapshots
+class LandscapePhoneSnapshotTests : PaparazziSnapshotTests(
+    before = before,
+    fontScales = fontScales,
+    showkasePreviews = screenPreviews,
+    theme = theme,
+    uiThemes = uiThemes,
+    strategy = SnapshotStrategy.Screen(
+        DeviceConfig(
+            device = Device.PIXEL_6,
+            orientation = DeviceOrientation.LANDSCAPE
+        )
+    )
+)
+
+// Tablet screen snapshots (landscape by default)
 class TabletSnapshotTests : PaparazziSnapshotTests(
     before = before,
     fontScales = fontScales,
     showkasePreviews = screenPreviews,
     theme = theme,
     uiThemes = uiThemes,
-    strategy = SnapshotStrategy.Screen(Device.NEXUS_10)
+    strategy = SnapshotStrategy.Screen(
+        DeviceConfig(
+            device = Device.NEXUS_10,
+            orientation = DeviceOrientation.LANDSCAPE
+        )
+    )
 )
 ```
 
