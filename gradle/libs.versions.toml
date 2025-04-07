@@ -1,14 +1,14 @@
 [versions]
-agp = "8.7.2"
-kotlin = "2.0.21"
-ksp = "2.0.21-1.0.27"
+agp = "8.7.3"
+kotlin = "2.1.10"
+ksp = "2.1.10-1.0.31"
 coreKtx = "1.15.0"
 junit = "4.13.2"
-junit5-bom = "5.11.0"
+junit5-bom = "5.11.4"
 junitVersion = "1.2.1"
 lifecycleRuntimeKtx = "2.8.7"
-activityCompose = "1.9.3"
-composeBom = "2024.11.00"
+activityCompose = "1.10.1"
+composeBom = "2025.03.01"
 appcompat = "1.7.0"
 material = "1.12.0"
 kotest = "5.9.1"
@@ -41,9 +41,6 @@ showkase-processor = { module = "com.airbnb.android:showkase-processor", version
 junit5-bom = { module = "org.junit:junit-bom", version.ref = "junit5-bom" }
 junit-vintage-engine = { module = "org.junit.vintage:junit-vintage-engine" }
 kotest-runnerJunit5 = { module = "io.kotest:kotest-runner-junit5", version.ref = "kotest" }
-roborazzi = { group = "io.github.takahirom.roborazzi", name = "roborazzi", version.ref = "roborazzi" }
-roborazzi-compose = { group = "io.github.takahirom.roborazzi", name = "roborazzi-compose", version.ref = "roborazzi" }
-roborazzi-rule = { group = "io.github.takahirom.roborazzi", name = "roborazzi-junit-rule", version.ref = "roborazzi" }
 
 # Build-logic dependencies
 android-gradlePlugin = { module = "com.android.tools.build:gradle", version.ref = "agp" }
@@ -58,7 +55,6 @@ kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "ko
 kotlin-ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 paparazzi = { id = "app.cash.paparazzi", version.ref = "paparazzi" }
 gradle-maven-publish = { id = "com.vanniktech.maven.publish", version.ref = "gradle-maven-publish" }
-roborazzi = { id = "io.github.takahirom.roborazzi", version.ref = "roborazzi" }
 
 # Convention plugins
 ackeecz-snapshots-android-application = "ackeecz-snapshots-android-application:none"

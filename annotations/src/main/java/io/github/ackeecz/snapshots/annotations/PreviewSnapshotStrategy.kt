@@ -14,5 +14,3 @@ object PreviewSnapshotStrategy {
      */
     const val Screen = "screen"
 }
-
-

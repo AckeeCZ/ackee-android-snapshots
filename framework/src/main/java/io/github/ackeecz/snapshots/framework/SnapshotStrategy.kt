@@ -9,8 +9,8 @@ sealed interface SnapshotStrategy {
         override val name = "component"
     }
 
-    data class Screen(val device: Device) : SnapshotStrategy {
+    data class Screen(val deviceConfig: DeviceConfig) : SnapshotStrategy {
 
-        override val name = device.name
+        override val name = deviceConfig.name
     }
 }
