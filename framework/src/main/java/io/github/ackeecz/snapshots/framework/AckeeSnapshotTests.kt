@@ -1,10 +1,8 @@
 package io.github.ackeecz.snapshots.framework
 
 import android.content.Context
-import android.content.res.Configuration
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Density
 import com.airbnb.android.showkase.models.ShowkaseBrowserComponent
@@ -15,28 +13,23 @@ abstract class AckeeSnapshotTests(
     before: (context: Context) -> Unit,
     fontScales: List<FontScale>,
     showkasePreviews: List<ShowkaseBrowserComponent>,
-    uiThemes: List<UiTheme>,
+    uiTheme: UiTheme,
     strategy: SnapshotStrategy,
-    theme: @Composable (UiTheme, @Composable () -> Unit) -> Unit
+    theme: @Composable (UiTheme, @Composable () -> Unit) -> Unit,
 ) : FunSpec({
-    engine.init(strategy, this)
+    engine.init(strategy, uiTheme, this)
 
     beforeTest {
         before(engine.context)
     }
-
     preparePreviews(showkasePreviews).forEach { componentPreview ->
-        if (uiThemes.size > 1) {
-            uiThemes.forEach { uiTheme ->
-                test("${componentPreview}_${strategy.name}_theme=${uiTheme.name}") {
-                    takeSnapshot(
-                        engine = engine,
-                        theme = theme,
-                        componentPreview = componentPreview,
-                        uiTheme = uiTheme
-                    )
-                }
-            }
+        test("${componentPreview}_${strategy.name}") {
+            takeSnapshot(
+                engine = engine,
+                theme = theme,
+                componentPreview = componentPreview,
+                uiTheme = uiTheme
+            )
         }
         fontScales.forEach { fontScale ->
             test("${componentPreview}_${strategy.name}_fs=$fontScale") {
@@ -59,24 +52,15 @@ private fun takeSnapshot(
     uiTheme: UiTheme = UiTheme.LIGHT,
 ) {
     engine.snapshot {
-        CompositionLocalProvider(
-            LocalConfiguration provides LocalConfiguration.current.apply {
-                uiMode = when (uiTheme) {
-                    UiTheme.LIGHT -> Configuration.UI_MODE_NIGHT_NO
-                    UiTheme.DARK -> Configuration.UI_MODE_NIGHT_YES
-                }
-            }
-        ) {
-            theme(uiTheme) {
-                val currentDensity = LocalDensity.current
-                CompositionLocalProvider(
-                    LocalDensity provides Density(
-                        density = currentDensity.density,
-                        fontScale = fontScale.scale
-                    )
-                ) {
-                    componentPreview.content()
-                }
+        theme(uiTheme) {
+            val currentDensity = LocalDensity.current
+            CompositionLocalProvider(
+                LocalDensity provides Density(
+                    density = currentDensity.density,
+                    fontScale = fontScale.scale
+                )
+            ) {
+                componentPreview.content()
             }
         }
     }

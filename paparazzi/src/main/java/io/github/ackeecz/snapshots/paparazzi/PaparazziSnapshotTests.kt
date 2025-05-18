@@ -12,7 +12,7 @@ abstract class PaparazziSnapshotTests(
     before: (context: Context) -> Unit,
     fontScales: List<FontScale>,
     showkasePreviews: List<ShowkaseBrowserComponent>,
-    uiThemes: List<UiTheme>,
+    uiTheme: UiTheme,
     strategy: SnapshotStrategy,
     theme: @Composable (UiTheme, @Composable () -> Unit) -> Unit
 ) : AckeeSnapshotTests(
@@ -20,7 +20,7 @@ abstract class PaparazziSnapshotTests(
     before = before,
     fontScales = fontScales,
     showkasePreviews = showkasePreviews,
-    uiThemes = uiThemes,
+    uiTheme = uiTheme,
     strategy = strategy,
     theme = theme
 )
