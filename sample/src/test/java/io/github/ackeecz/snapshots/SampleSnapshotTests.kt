@@ -36,7 +36,7 @@ val componentPreviews = Showkase.getMetadata().componentList.filter {
     it.extraMetadata.contains(PreviewSnapshotStrategy.Component)
 }
 
-class ComponentsSnapshotTests : PaparazziSnapshotTests(
+class LightComponentsSnapshotTests : PaparazziSnapshotTests(
     before = before,
     fontScales = fontScales,
     showkasePreviews = componentPreviews,
@@ -54,7 +54,7 @@ class DarkComponentsSnapshotTests : PaparazziSnapshotTests(
     strategy = SnapshotStrategy.Component
 )
 
-class PortraitPhoneSnapshotTests : PaparazziSnapshotTests(
+class LightPortraitPhoneSnapshotTests : PaparazziSnapshotTests(
     before = before,
     fontScales = fontScales,
     showkasePreviews = screenPreviews,
@@ -82,7 +82,7 @@ class DarkPortraitPhoneSnapshotTests : PaparazziSnapshotTests(
     ),
 )
 
-class LandscapePhoneSnapshotTests : PaparazziSnapshotTests(
+class LightLandscapePhoneSnapshotTests : PaparazziSnapshotTests(
     before = before,
     fontScales = fontScales,
     showkasePreviews = screenPreviews,
@@ -110,7 +110,7 @@ class DarkLandscapePhoneSnapshotTests : PaparazziSnapshotTests(
     ),
 )
 
-class TabletSnapshotTests : PaparazziSnapshotTests(
+class LightTabletSnapshotTests : PaparazziSnapshotTests(
     before = before,
     fontScales = fontScales,
     showkasePreviews = screenPreviews,
