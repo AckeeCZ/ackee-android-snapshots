@@ -158,23 +158,21 @@ devices specify a separate test case for each device. Check the sample below.
 1. Create snapshot test classes for different testing strategies:
 
 ```kotlin
-// Common configuration
 val fontScales = listOf(FontScale.NORMAL, FontScale.LARGE)
-val uiThemes = listOf(UiTheme.LIGHT, UiTheme.DARK)
-val before: (Context) -> Unit = {
-    // this is executed before each snapshot, it might be used to mock some data, eg. dates used
-    // in previews.
+
+val before = { _: Context ->
+    // nothing
 }
-// Theme wrapper
+
 val theme: @Composable (UiTheme, @Composable () -> Unit) -> Unit = { uiTheme, content ->
-    AppTheme(
+    SnapshotsSampleTheme(
         darkTheme = uiTheme == UiTheme.DARK,
+        dynamicColor = false
     ) {
         content()
     }
 }
 
-// Filter previews based on strategy
 val screenPreviews = Showkase.getMetadata().componentList.filter {
     !it.extraMetadata.contains(PreviewSnapshotStrategy.Component)
 }
@@ -183,59 +181,106 @@ val componentPreviews = Showkase.getMetadata().componentList.filter {
     it.extraMetadata.contains(PreviewSnapshotStrategy.Component)
 }
 
-// Component snapshots
-class ComponentsSnapshotTests : PaparazziSnapshotTests(
+class LightComponentsSnapshotTests : PaparazziSnapshotTests(
     before = before,
     fontScales = fontScales,
     showkasePreviews = componentPreviews,
     theme = theme,
-    uiThemes = uiThemes,
+    uiTheme = UiTheme.LIGHT,
     strategy = SnapshotStrategy.Component
 )
 
-// Portrait phone screen snapshots
-class PortraitPhoneSnapshotTests : PaparazziSnapshotTests(
+class DarkComponentsSnapshotTests : PaparazziSnapshotTests(
+    before = before,
+    fontScales = emptyList(),
+    showkasePreviews = componentPreviews,
+    theme = theme,
+    uiTheme = UiTheme.DARK,
+    strategy = SnapshotStrategy.Component
+)
+
+class LightPortraitPhoneSnapshotTests : PaparazziSnapshotTests(
     before = before,
     fontScales = fontScales,
     showkasePreviews = screenPreviews,
     theme = theme,
-    uiThemes = uiThemes,
+    uiTheme = UiTheme.LIGHT,
     strategy = SnapshotStrategy.Screen(
         DeviceConfig(
             device = Device.PIXEL_6,
             orientation = DeviceOrientation.PORTRAIT
         )
-    )
+    ),
 )
 
-// Landscape phone screen snapshots
-class LandscapePhoneSnapshotTests : PaparazziSnapshotTests(
+class DarkPortraitPhoneSnapshotTests : PaparazziSnapshotTests(
+    before = before,
+    fontScales = emptyList(),
+    showkasePreviews = screenPreviews,
+    theme = theme,
+    uiTheme = UiTheme.DARK,
+    strategy = SnapshotStrategy.Screen(
+        DeviceConfig(
+            device = Device.PIXEL_6,
+            orientation = DeviceOrientation.PORTRAIT
+        )
+    ),
+)
+
+class LightLandscapePhoneSnapshotTests : PaparazziSnapshotTests(
     before = before,
     fontScales = fontScales,
     showkasePreviews = screenPreviews,
     theme = theme,
-    uiThemes = uiThemes,
+    uiTheme = UiTheme.LIGHT,
     strategy = SnapshotStrategy.Screen(
         DeviceConfig(
             device = Device.PIXEL_6,
             orientation = DeviceOrientation.LANDSCAPE
         )
-    )
+    ),
 )
 
-// Tablet screen snapshots (landscape by default)
-class TabletSnapshotTests : PaparazziSnapshotTests(
+class DarkLandscapePhoneSnapshotTests : PaparazziSnapshotTests(
+    before = before,
+    fontScales = emptyList(),
+    showkasePreviews = screenPreviews,
+    theme = theme,
+    uiTheme = UiTheme.DARK,
+    strategy = SnapshotStrategy.Screen(
+        DeviceConfig(
+            device = Device.PIXEL_6,
+            orientation = DeviceOrientation.LANDSCAPE
+        )
+    ),
+)
+
+class LightTabletSnapshotTests : PaparazziSnapshotTests(
     before = before,
     fontScales = fontScales,
     showkasePreviews = screenPreviews,
     theme = theme,
-    uiThemes = uiThemes,
+    uiTheme = UiTheme.LIGHT,
     strategy = SnapshotStrategy.Screen(
         DeviceConfig(
             device = Device.NEXUS_10,
             orientation = DeviceOrientation.LANDSCAPE
         )
-    )
+    ),
+)
+
+class DarkTabletSnapshotTests : PaparazziSnapshotTests(
+    before = before,
+    fontScales = emptyList(),
+    showkasePreviews = screenPreviews,
+    theme = theme,
+    uiTheme = UiTheme.DARK,
+    strategy = SnapshotStrategy.Screen(
+        DeviceConfig(
+            device = Device.NEXUS_10,
+            orientation = DeviceOrientation.LANDSCAPE
+        )
+    ),
 )
 ```
 
