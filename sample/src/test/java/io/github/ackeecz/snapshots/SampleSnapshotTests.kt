@@ -36,23 +36,30 @@ val componentPreviews = Showkase.getMetadata().componentList.filter {
     it.extraMetadata.contains(PreviewSnapshotStrategy.Component)
 }
 
-val uiThemes = listOf(UiTheme.LIGHT, UiTheme.DARK)
-
-class ComponentsSnapshotTests : PaparazziSnapshotTests(
+class LightComponentsSnapshotTests : PaparazziSnapshotTests(
     before = before,
     fontScales = fontScales,
     showkasePreviews = componentPreviews,
     theme = theme,
-    uiThemes = uiThemes,
+    uiTheme = UiTheme.LIGHT,
     strategy = SnapshotStrategy.Component
 )
 
-class PortraitPhoneSnapshotTests : PaparazziSnapshotTests(
+class DarkComponentsSnapshotTests : PaparazziSnapshotTests(
+    before = before,
+    fontScales = emptyList(),
+    showkasePreviews = componentPreviews,
+    theme = theme,
+    uiTheme = UiTheme.DARK,
+    strategy = SnapshotStrategy.Component
+)
+
+class LightPortraitPhoneSnapshotTests : PaparazziSnapshotTests(
     before = before,
     fontScales = fontScales,
     showkasePreviews = screenPreviews,
     theme = theme,
-    uiThemes = uiThemes,
+    uiTheme = UiTheme.LIGHT,
     strategy = SnapshotStrategy.Screen(
         DeviceConfig(
             device = Device.PIXEL_6,
@@ -61,12 +68,26 @@ class PortraitPhoneSnapshotTests : PaparazziSnapshotTests(
     ),
 )
 
-class LandscapePhoneSnapshotTests : PaparazziSnapshotTests(
+class DarkPortraitPhoneSnapshotTests : PaparazziSnapshotTests(
+    before = before,
+    fontScales = emptyList(),
+    showkasePreviews = screenPreviews,
+    theme = theme,
+    uiTheme = UiTheme.DARK,
+    strategy = SnapshotStrategy.Screen(
+        DeviceConfig(
+            device = Device.PIXEL_6,
+            orientation = DeviceOrientation.PORTRAIT
+        )
+    ),
+)
+
+class LightLandscapePhoneSnapshotTests : PaparazziSnapshotTests(
     before = before,
     fontScales = fontScales,
     showkasePreviews = screenPreviews,
     theme = theme,
-    uiThemes = uiThemes,
+    uiTheme = UiTheme.LIGHT,
     strategy = SnapshotStrategy.Screen(
         DeviceConfig(
             device = Device.PIXEL_6,
@@ -75,12 +96,40 @@ class LandscapePhoneSnapshotTests : PaparazziSnapshotTests(
     ),
 )
 
-class TabletSnapshotTests : PaparazziSnapshotTests(
+class DarkLandscapePhoneSnapshotTests : PaparazziSnapshotTests(
+    before = before,
+    fontScales = emptyList(),
+    showkasePreviews = screenPreviews,
+    theme = theme,
+    uiTheme = UiTheme.DARK,
+    strategy = SnapshotStrategy.Screen(
+        DeviceConfig(
+            device = Device.PIXEL_6,
+            orientation = DeviceOrientation.LANDSCAPE
+        )
+    ),
+)
+
+class LightTabletSnapshotTests : PaparazziSnapshotTests(
     before = before,
     fontScales = fontScales,
     showkasePreviews = screenPreviews,
     theme = theme,
-    uiThemes = uiThemes,
+    uiTheme = UiTheme.LIGHT,
+    strategy = SnapshotStrategy.Screen(
+        DeviceConfig(
+            device = Device.NEXUS_10,
+            orientation = DeviceOrientation.LANDSCAPE
+        )
+    ),
+)
+
+class DarkTabletSnapshotTests : PaparazziSnapshotTests(
+    before = before,
+    fontScales = emptyList(),
+    showkasePreviews = screenPreviews,
+    theme = theme,
+    uiTheme = UiTheme.DARK,
     strategy = SnapshotStrategy.Screen(
         DeviceConfig(
             device = Device.NEXUS_10,

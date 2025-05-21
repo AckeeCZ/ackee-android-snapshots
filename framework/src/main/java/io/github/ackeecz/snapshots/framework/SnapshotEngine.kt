@@ -6,7 +6,7 @@ import io.kotest.core.spec.style.FunSpec
 
 interface SnapshotEngine {
 
-    fun init(strategy: SnapshotStrategy, funSpec: FunSpec)
+    fun init(strategy: SnapshotStrategy, uiTheme: UiTheme, funSpec: FunSpec)
     val context: Context
     fun snapshot(content: @Composable () -> Unit)
 }
