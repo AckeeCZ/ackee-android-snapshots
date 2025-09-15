@@ -73,6 +73,9 @@ If you use `paparazzi` artifact, you will need the following additional configur
 
 ```toml
 [versions]
+# Ensure that this version is equal or greater than Paparazzi version in this project. Otherwise
+# there might be incompatibility between Paparazzi runtime used in Ackee Snapshots and Paparazzi
+# Gradle plugin used by your app.
 paparazzi = "SPECIFY_VERSION"
 
 [dependencies]
