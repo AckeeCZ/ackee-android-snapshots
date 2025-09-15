@@ -4,7 +4,7 @@ import app.cash.paparazzi.Paparazzi
 import io.kotest.core.listeners.AfterEachListener
 import io.kotest.core.listeners.BeforeEachListener
 import io.kotest.core.test.TestCase
-import io.kotest.core.test.TestResult
+import io.kotest.engine.test.TestResult
 import org.junit.runner.Description
 import org.junit.runners.model.Statement
 
@@ -35,4 +35,4 @@ private object NoopJunitStatement : Statement() {
 }
 
 private val TestCase.junit4Description: Description
-    get() = Description.createTestDescription(descriptor.parent.id.value, name.testName)
+    get() = Description.createTestDescription(descriptor.parent.id.value, name.name)

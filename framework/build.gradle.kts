@@ -16,8 +16,8 @@ android {
 dependencies {
     implementation(libs.showkase.core)
 
-    compileOnly(platform(libs.androidx.compose.bom))
-    compileOnly(libs.androidx.ui)
+    compileOnly(platform(libs.compose.bom))
+    compileOnly(libs.compose.ui)
 
-    implementation(libs.kotest.framework.api)
+    implementation(libs.kotest.runner.junit5)
 }

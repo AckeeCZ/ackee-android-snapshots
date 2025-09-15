@@ -1,3 +1,4 @@
+import io.github.ackeecz.snapshots.compileOnly
 import io.github.ackeecz.snapshots.implementation
 import io.github.ackeecz.snapshots.libs
 
@@ -14,9 +15,11 @@ android {
 dependencies {
     implementation(projects.framework)
 
+    implementation(libs.kotest.runner.junit5)
+
+    compileOnly(platform(libs.compose.bom))
+    compileOnly(libs.compose.ui)
+
     compileOnly(libs.paparazzi)
-    implementation(libs.kotest.framework.api)
     implementation(libs.showkase.core)
-    compileOnly(platform(libs.androidx.compose.bom))
-    compileOnly(libs.androidx.ui)
 }
