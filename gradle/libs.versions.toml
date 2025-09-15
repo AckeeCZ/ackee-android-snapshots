@@ -9,6 +9,9 @@ dokka = "2.0.0"
 gradle-maven-publish = "0.34.0"
 junit5Bom = "5.13.4"
 kotest = "6.0.3"
+# TODO Replace by embedded validator in Kotlin Gradle Plugin. Currently embedded validator does not
+#  work for some reason and just produces empty .api files.
+kotlin-binaryCompatibilityValidator = "0.18.1"
 kotlin = "2.2.20"
 ksp = "2.2.20-2.0.3"
 paparazzi = "2.0.0-alpha02"
@@ -49,6 +52,7 @@ detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
 dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
 gradle-maven-publish = { id = "com.vanniktech.maven.publish", version.ref = "gradle-maven-publish" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+kotlin-binaryCompatibilityValidator = { id = "org.jetbrains.kotlinx.binary-compatibility-validator", version.ref = "kotlin-binaryCompatibilityValidator" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlin-ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 paparazzi = { id = "app.cash.paparazzi", version.ref = "paparazzi" }
