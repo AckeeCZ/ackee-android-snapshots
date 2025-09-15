@@ -46,6 +46,7 @@ tasks.withType<Test>().configureEach {
 dependencies {
     compileOnly(files(libs::class.java.superclass.protectionDomain.codeSource.location))
     compileOnly(libs.android.gradlePlugin)
+    compileOnly(libs.detekt.gradlePlugin)
     compileOnly(libs.kotlin.gradlePlugin)
     compileOnly(libs.gradle.maven.publish.gradlePlugin)
 
