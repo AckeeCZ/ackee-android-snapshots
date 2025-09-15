@@ -61,4 +61,5 @@ paparazzi = { id = "app.cash.paparazzi", version.ref = "paparazzi" }
 ackeecz-snapshots-android-application = { id = "ackeecz.snapshots.android.application" }
 ackeecz-snapshots-android-library = { id = "ackeecz.snapshots.android.library" }
 ackeecz-snapshots-compose = { id = "ackeecz.snapshots.compose" }
+ackeecz-snapshots-preflightchecks = { id = "ackeecz.snapshots.preflightchecks" }
 ackeecz-snapshots-publishing = { id = "ackeecz.snapshots.publishing" }

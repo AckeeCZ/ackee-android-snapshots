@@ -61,7 +61,6 @@ gradlePlugin {
             dependency = libs.plugins.ackeecz.snapshots.android.application,
             pluginName = "AndroidApplicationConventionPlugin",
         )
-
         plugin(
             dependency = libs.plugins.ackeecz.snapshots.android.library,
             pluginName = "AndroidLibraryConventionPlugin"
@@ -73,6 +72,10 @@ gradlePlugin {
         plugin(
             dependency = libs.plugins.ackeecz.snapshots.publishing,
             pluginName = "PublishingConventionPlugin"
+        )
+        plugin(
+            dependency = libs.plugins.ackeecz.snapshots.preflightchecks,
+            pluginName = "RegisterPreflightChecksPlugin",
         )
     }
 }
