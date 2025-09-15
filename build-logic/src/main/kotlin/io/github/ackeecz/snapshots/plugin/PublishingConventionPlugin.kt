@@ -19,25 +19,15 @@ class PublishingConventionPlugin : Plugin<Project> {
         extensions.configure<MavenPublishBaseExtension> {
             val commonLibProperties = Properties().apply { load(file("${rootDir.absolutePath}/lib.properties").inputStream()) }
             val moduleLibProperties = Properties().apply { load(file("${projectDir.absolutePath}/lib.properties").inputStream()) }
-            // include versions of compose and paparazzi in particular modules
-            val versionSuffix = when (name) {
-                "framework" -> libs.versions.composeBom.get()
-                "paparazzi" -> libs.versions.paparazzi.get()
-                else -> null
-            }
+
             val groupId = commonLibProperties.getProperty("GROUP")
             val artifactId = "${commonLibProperties.getProperty("ARTIFACT_BASE_NAME")}-$name"
-            val version = buildString {
-                append(commonLibProperties.getProperty("VERSION_NAME"))
-                if (versionSuffix != null) {
-                    append("-$versionSuffix")
-                }
-            }
+            val version = commonLibProperties.getProperty("VERSION_NAME")
 
             coordinates(
                 groupId = groupId,
                 artifactId = artifactId,
-                version = version
+                version = version,
             )
 
             pom {

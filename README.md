@@ -78,43 +78,6 @@ testImplementation(libs.ackee.snapshots.framework)
 testImplementation(libs.ackee.snapshots.paparazzi)
 ```
 
-## Versioning
-
-The library uses a versioning scheme that reflects compatibility with its core dependencies:
-
-### Framework Module
-
-The framework module version includes the Compose BOM version as a suffix:
-```
-{base_version}-{compose_bom_version}
-```
-
-Example: `0.1.0-2024.02.00`
-
-### Paparazzi Module
-The Paparazzi module version includes the Paparazzi version as a suffix:
-```
-{base_version}-{paparazzi_version}
-```
-
-Example: `0.1.0-1.3.1`
-
-### Annotations Module
-
-The annotations module uses only the base version without any suffix:
-```
-{base_version}
-```
-Example: `0.1.0`
-
-This versioning strategy helps users:
-- Track compatibility with specific Compose and Paparazzi versions
-- Choose the right artifact version for their setup
-- Avoid version conflicts with their project's dependencies
-
-Note: The library intentionally does not set Compose or Paparazzi versions to prevent version conflicts. You need to specify these versions in your
-project to ensure compatibility with your setup.
-
 ## Configuration
 
 The library supports two main testing strategies:

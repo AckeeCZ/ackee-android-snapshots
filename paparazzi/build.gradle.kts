@@ -1,4 +1,3 @@
-import io.github.ackeecz.snapshots.compileOnly
 import io.github.ackeecz.snapshots.implementation
 import io.github.ackeecz.snapshots.libs
 
@@ -17,9 +16,9 @@ dependencies {
 
     implementation(libs.kotest.runner.junit5)
 
-    compileOnly(platform(libs.compose.bom))
-    compileOnly(libs.compose.ui)
+    implementation(platform(libs.compose.bom))
+    implementation(libs.compose.ui)
 
-    compileOnly(libs.paparazzi)
+    implementation(libs.paparazzi)
     implementation(libs.showkase.core)
 }
