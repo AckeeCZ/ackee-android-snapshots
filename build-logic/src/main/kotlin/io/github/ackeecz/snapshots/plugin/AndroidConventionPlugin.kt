@@ -1,12 +1,11 @@
 package io.github.ackeecz.snapshots.plugin
 
 import com.android.build.gradle.BaseExtension
-import io.github.ackeecz.snapshots.Constants
-import io.github.ackeecz.snapshots.androidBase
+import io.github.ackeecz.snapshots.util.Constants
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 
-class AndroidConventionPlugin : Plugin<Project> {
+internal class AndroidConventionPlugin : Plugin<Project> {
 
     override fun apply(target: Project) {
         target.configure()

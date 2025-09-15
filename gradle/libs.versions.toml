@@ -4,11 +4,12 @@ android-core = "1.17.0"
 android-gradlePlugin = "8.13.0"
 android-lifecycle = "2.9.3"
 composeBom = "2025.09.00"
+dokka = "2.0.0"
 gradle-maven-publish = "0.34.0"
 junit5Bom = "5.13.4"
 kotest = "6.0.3"
-kotlin = "2.2.10"
-ksp = "2.2.10-2.0.2"
+kotlin = "2.2.20"
+ksp = "2.2.20-2.0.3"
 paparazzi = "2.0.0-alpha02"
 showkase = "1.0.5"
 
@@ -24,6 +25,7 @@ compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
 
 junit5-bom = { module = "org.junit:junit-bom", version.ref = "junit5Bom" }
+kotest-assertions-core = { module = "io.kotest:kotest-assertions-core", version.ref = "kotest" }
 kotest-runner-junit5 = { module = "io.kotest:kotest-runner-junit5", version.ref = "kotest" }
 
 paparazzi = { module = "app.cash.paparazzi:paparazzi", version.ref = "paparazzi" }
@@ -39,6 +41,7 @@ kotlin-gradlePlugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", ve
 [plugins]
 android-application = { id = "com.android.application", version.ref = "android-gradlePlugin" }
 android-library = { id = "com.android.library", version.ref = "android-gradlePlugin" }
+dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
 gradle-maven-publish = { id = "com.vanniktech.maven.publish", version.ref = "gradle-maven-publish" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
@@ -46,7 +49,7 @@ kotlin-ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 paparazzi = { id = "app.cash.paparazzi", version.ref = "paparazzi" }
 
 # Convention plugins
-ackeecz-snapshots-android-application = "ackeecz-snapshots-android-application:none"
-ackeecz-snapshots-android-library = "ackeecz-snapshots-android-library:none"
-ackeecz-snapshots-compose = "ackeecz-snapshots-compose:none"
-ackeecz-snapshots-publishing = "ackeecz-snapshots-publishing:none"
+ackeecz-snapshots-android-application = { id = "ackeecz.snapshots.android.application" }
+ackeecz-snapshots-android-library = { id = "ackeecz.snapshots.android.library" }
+ackeecz-snapshots-compose = { id = "ackeecz.snapshots.compose" }
+ackeecz-snapshots-publishing = { id = "ackeecz.snapshots.publishing" }

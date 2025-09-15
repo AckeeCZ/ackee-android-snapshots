@@ -1,8 +1,6 @@
 package io.github.ackeecz.snapshots.plugin
 
-import io.github.ackeecz.snapshots.Constants
-import io.github.ackeecz.snapshots.apply
-import io.github.ackeecz.snapshots.libs
+import io.github.ackeecz.snapshots.util.Constants
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.withType

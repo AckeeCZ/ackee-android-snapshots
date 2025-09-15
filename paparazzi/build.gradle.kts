@@ -1,6 +1,3 @@
-import io.github.ackeecz.snapshots.implementation
-import io.github.ackeecz.snapshots.libs
-
 plugins {
     alias(libs.plugins.ackeecz.snapshots.android.library)
     alias(libs.plugins.ackeecz.snapshots.compose)
