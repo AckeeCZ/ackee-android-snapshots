@@ -1,12 +1,9 @@
 package io.github.ackeecz.snapshots.plugin
 
-import io.github.ackeecz.snapshots.androidCommon
-import io.github.ackeecz.snapshots.apply
-import io.github.ackeecz.snapshots.libs
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 
-class ComposeConventionPlugin : Plugin<Project> {
+internal class ComposeConventionPlugin : Plugin<Project> {
 
     override fun apply(target: Project) {
         target.configure()

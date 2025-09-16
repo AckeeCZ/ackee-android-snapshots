@@ -1,7 +1,3 @@
-import io.github.ackeecz.snapshots.debugImplementation
-import io.github.ackeecz.snapshots.implementation
-import io.github.ackeecz.snapshots.libs
-
 plugins {
     alias(libs.plugins.ackeecz.snapshots.android.application)
     alias(libs.plugins.ackeecz.snapshots.compose)
@@ -37,27 +33,23 @@ android {
 
 dependencies {
 
+    implementation(projects.annotations)
     testImplementation(projects.framework)
     testImplementation(projects.paparazzi)
-    implementation(projects.annotations)
-
-    implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.androidx.ui)
-    debugImplementation(libs.androidx.ui.tooling)
-    implementation(libs.androidx.ui.tooling.preview)
-    implementation(libs.androidx.material3)
-    implementation(libs.androidx.activity.compose)
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.lifecycle.runtime.ktx)
 
     implementation(libs.showkase.core)
     ksp(libs.showkase.processor)
 
+    implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.core)
+    implementation(libs.androidx.lifecycle.runtime)
+    implementation(libs.androidx.material3)
+
+    implementation(platform(libs.compose.bom))
+    implementation(libs.compose.ui)
+    debugImplementation(libs.compose.ui.tooling)
+    implementation(libs.compose.ui.tooling.preview)
+
     testImplementation(platform(libs.junit5.bom))
-    testImplementation(libs.junit)
-    // Runner for JUnit 4 tests
-    testRuntimeOnly(libs.junit.vintage.engine)
-    testRuntimeOnly(libs.kotest.runnerJunit5)
-    testImplementation(libs.kotest.framework.api)
-    testImplementation(libs.junit)
+    testImplementation(libs.kotest.runner.junit5)
 }

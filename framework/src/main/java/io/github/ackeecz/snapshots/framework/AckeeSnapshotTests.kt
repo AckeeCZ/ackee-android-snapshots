@@ -8,6 +8,7 @@ import androidx.compose.ui.unit.Density
 import com.airbnb.android.showkase.models.ShowkaseBrowserComponent
 import io.kotest.core.spec.style.FunSpec
 
+@Suppress("LongParameterList")
 abstract class AckeeSnapshotTests(
     engine: SnapshotEngine,
     before: (context: Context) -> Unit,

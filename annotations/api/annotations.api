@@ -1,0 +1,6 @@
+public final class io/github/ackeecz/snapshots/annotations/PreviewSnapshotStrategy {
+	public static final field Component Ljava/lang/String;
+	public static final field INSTANCE Lio/github/ackeecz/snapshots/annotations/PreviewSnapshotStrategy;
+	public static final field Screen Ljava/lang/String;
+}
+

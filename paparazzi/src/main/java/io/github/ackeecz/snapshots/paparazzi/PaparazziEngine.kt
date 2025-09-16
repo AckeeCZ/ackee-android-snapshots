@@ -24,9 +24,7 @@ class PaparazziEngine : SnapshotEngine {
 
     override fun init(strategy: SnapshotStrategy, uiTheme: UiTheme, funSpec: FunSpec) {
         paparazzi = createPaparazzi(strategy, uiTheme)
-        PaparazziExtension(paparazzi).also {
-            funSpec.extension(it)
-        }
+        funSpec.extension(PaparazziExtension(paparazzi))
     }
 
     private fun createPaparazzi(

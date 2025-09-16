@@ -1,0 +1,93 @@
+public abstract class io/github/ackeecz/snapshots/framework/AckeeSnapshotTests : io/kotest/core/spec/style/FunSpec {
+	public static final field $stable I
+	public fun <init> (Lio/github/ackeecz/snapshots/framework/SnapshotEngine;Lkotlin/jvm/functions/Function1;Ljava/util/List;Ljava/util/List;Lio/github/ackeecz/snapshots/framework/UiTheme;Lio/github/ackeecz/snapshots/framework/SnapshotStrategy;Lkotlin/jvm/functions/Function4;)V
+}
+
+public final class io/github/ackeecz/snapshots/framework/ComponentPreview {
+	public static final field $stable I
+	public fun <init> (Ljava/lang/String;Lcom/airbnb/android/showkase/models/ShowkaseBrowserComponent;)V
+	public final fun getContent ()Lkotlin/jvm/functions/Function2;
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/ackeecz/snapshots/framework/Device : java/lang/Enum {
+	public static final field NEXUS_10 Lio/github/ackeecz/snapshots/framework/Device;
+	public static final field PIXEL_6 Lio/github/ackeecz/snapshots/framework/Device;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/ackeecz/snapshots/framework/Device;
+	public static fun values ()[Lio/github/ackeecz/snapshots/framework/Device;
+}
+
+public final class io/github/ackeecz/snapshots/framework/DeviceConfig {
+	public static final field $stable I
+	public fun <init> (Lio/github/ackeecz/snapshots/framework/Device;Lio/github/ackeecz/snapshots/framework/DeviceOrientation;)V
+	public final fun component1 ()Lio/github/ackeecz/snapshots/framework/Device;
+	public final fun component2 ()Lio/github/ackeecz/snapshots/framework/DeviceOrientation;
+	public final fun copy (Lio/github/ackeecz/snapshots/framework/Device;Lio/github/ackeecz/snapshots/framework/DeviceOrientation;)Lio/github/ackeecz/snapshots/framework/DeviceConfig;
+	public static synthetic fun copy$default (Lio/github/ackeecz/snapshots/framework/DeviceConfig;Lio/github/ackeecz/snapshots/framework/Device;Lio/github/ackeecz/snapshots/framework/DeviceOrientation;ILjava/lang/Object;)Lio/github/ackeecz/snapshots/framework/DeviceConfig;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getDevice ()Lio/github/ackeecz/snapshots/framework/Device;
+	public final fun getName ()Ljava/lang/String;
+	public final fun getOrientation ()Lio/github/ackeecz/snapshots/framework/DeviceOrientation;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/ackeecz/snapshots/framework/DeviceOrientation : java/lang/Enum {
+	public static final field LANDSCAPE Lio/github/ackeecz/snapshots/framework/DeviceOrientation;
+	public static final field PORTRAIT Lio/github/ackeecz/snapshots/framework/DeviceOrientation;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/ackeecz/snapshots/framework/DeviceOrientation;
+	public static fun values ()[Lio/github/ackeecz/snapshots/framework/DeviceOrientation;
+}
+
+public final class io/github/ackeecz/snapshots/framework/FontScale : java/lang/Enum {
+	public static final field LARGE Lio/github/ackeecz/snapshots/framework/FontScale;
+	public static final field NORMAL Lio/github/ackeecz/snapshots/framework/FontScale;
+	public static final field SMALL Lio/github/ackeecz/snapshots/framework/FontScale;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public final fun getScale ()F
+	public static fun valueOf (Ljava/lang/String;)Lio/github/ackeecz/snapshots/framework/FontScale;
+	public static fun values ()[Lio/github/ackeecz/snapshots/framework/FontScale;
+}
+
+public abstract interface class io/github/ackeecz/snapshots/framework/SnapshotEngine {
+	public abstract fun getContext ()Landroid/content/Context;
+	public abstract fun init (Lio/github/ackeecz/snapshots/framework/SnapshotStrategy;Lio/github/ackeecz/snapshots/framework/UiTheme;Lio/kotest/core/spec/style/FunSpec;)V
+	public abstract fun snapshot (Lkotlin/jvm/functions/Function2;)V
+}
+
+public abstract interface class io/github/ackeecz/snapshots/framework/SnapshotStrategy {
+	public abstract fun getName ()Ljava/lang/String;
+}
+
+public final class io/github/ackeecz/snapshots/framework/SnapshotStrategy$Component : io/github/ackeecz/snapshots/framework/SnapshotStrategy {
+	public static final field $stable I
+	public static final field INSTANCE Lio/github/ackeecz/snapshots/framework/SnapshotStrategy$Component;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getName ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/ackeecz/snapshots/framework/SnapshotStrategy$Screen : io/github/ackeecz/snapshots/framework/SnapshotStrategy {
+	public static final field $stable I
+	public fun <init> (Lio/github/ackeecz/snapshots/framework/DeviceConfig;)V
+	public final fun component1 ()Lio/github/ackeecz/snapshots/framework/DeviceConfig;
+	public final fun copy (Lio/github/ackeecz/snapshots/framework/DeviceConfig;)Lio/github/ackeecz/snapshots/framework/SnapshotStrategy$Screen;
+	public static synthetic fun copy$default (Lio/github/ackeecz/snapshots/framework/SnapshotStrategy$Screen;Lio/github/ackeecz/snapshots/framework/DeviceConfig;ILjava/lang/Object;)Lio/github/ackeecz/snapshots/framework/SnapshotStrategy$Screen;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getDeviceConfig ()Lio/github/ackeecz/snapshots/framework/DeviceConfig;
+	public fun getName ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/ackeecz/snapshots/framework/UiTheme : java/lang/Enum {
+	public static final field DARK Lio/github/ackeecz/snapshots/framework/UiTheme;
+	public static final field LIGHT Lio/github/ackeecz/snapshots/framework/UiTheme;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/ackeecz/snapshots/framework/UiTheme;
+	public static fun values ()[Lio/github/ackeecz/snapshots/framework/UiTheme;
+}
+
