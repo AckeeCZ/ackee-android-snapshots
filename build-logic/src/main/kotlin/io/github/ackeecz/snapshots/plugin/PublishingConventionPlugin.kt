@@ -51,7 +51,7 @@ internal class PublishingConventionPlugin : Plugin<Project> {
                     developer {
                         id.set(libraryProperties.pomDeveloperId)
                         name.set(libraryProperties.pomDeveloperName)
-                        url.set(libraryProperties.pomDeveloperEmail)
+                        email.set(libraryProperties.pomDeveloperEmail)
                     }
                 }
                 scm {
