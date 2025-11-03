@@ -24,14 +24,6 @@ abstract class AckeeSnapshotTests(
         before(engine.context)
     }
     preparePreviews(showkasePreviews).forEach { componentPreview ->
-        test("${componentPreview}_${strategy.name}") {
-            takeSnapshot(
-                engine = engine,
-                theme = theme,
-                componentPreview = componentPreview,
-                uiTheme = uiTheme
-            )
-        }
         fontScales.forEach { fontScale ->
             test("${componentPreview}_${strategy.name}_fs=$fontScale") {
                 takeSnapshot(
