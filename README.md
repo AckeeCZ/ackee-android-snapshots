@@ -143,6 +143,7 @@ devices specify a separate test case for each device. Check the sample below.
 
 ```kotlin
 val fontScales = listOf(FontScale.NORMAL, FontScale.LARGE)
+val defaultFontScale = listOf(FontScale.NORMAL)
 
 val before = { _: Context ->
     // nothing
@@ -176,7 +177,7 @@ class LightComponentsSnapshotTests : PaparazziSnapshotTests(
 
 class DarkComponentsSnapshotTests : PaparazziSnapshotTests(
     before = before,
-    fontScales = emptyList(),
+    fontScales = defaultFontScale,
     showkasePreviews = componentPreviews,
     theme = theme,
     uiTheme = UiTheme.DARK,
@@ -199,7 +200,7 @@ class LightPortraitPhoneSnapshotTests : PaparazziSnapshotTests(
 
 class DarkPortraitPhoneSnapshotTests : PaparazziSnapshotTests(
     before = before,
-    fontScales = emptyList(),
+    fontScales = defaultFontScale,
     showkasePreviews = screenPreviews,
     theme = theme,
     uiTheme = UiTheme.DARK,
@@ -227,7 +228,7 @@ class LightLandscapePhoneSnapshotTests : PaparazziSnapshotTests(
 
 class DarkLandscapePhoneSnapshotTests : PaparazziSnapshotTests(
     before = before,
-    fontScales = emptyList(),
+    fontScales = defaultFontScale,
     showkasePreviews = screenPreviews,
     theme = theme,
     uiTheme = UiTheme.DARK,
@@ -255,7 +256,7 @@ class LightTabletSnapshotTests : PaparazziSnapshotTests(
 
 class DarkTabletSnapshotTests : PaparazziSnapshotTests(
     before = before,
-    fontScales = emptyList(),
+    fontScales = defaultFontScale,
     showkasePreviews = screenPreviews,
     theme = theme,
     uiTheme = UiTheme.DARK,
@@ -301,6 +302,11 @@ This setup will:
 - Test UI components in their minimal size with both light/dark themes and font scales
 - Test full screens on a phone (Pixel 6) with both themes and font scales
 - Test full screens on a tablet (Nexus 10) with both themes and font scales
+
+ℹ️ **Note on Font Scale Configuration**: The example shows `fontScales` (containing both `NORMAL` and `LARGE`) for light theme tests, and
+`defaultFontScale` (containing only `NORMAL`) for dark theme tests. This pattern helps avoid redundant snapshot generation - since you're already
+testing font scale variations with the light theme, using only the normal font scale for dark theme tests prevents creating duplicate snapshots while
+still providing dark theme coverage.
 
 ## Project Structure
 

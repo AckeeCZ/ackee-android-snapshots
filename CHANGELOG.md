@@ -10,7 +10,12 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ### framework
 ### paparazzi
 
+## BOM [2.1.0-paparazzialpha02] - 2025-11-04
 
+### framework
+
+Update snapshots generation to not generate duplicate snapshots when testing UI theme and then
+the font scales.
 
 ## BOM [2.0.0-paparazzialpha02] - 2025-09-16
 Major breaking release that brings following changes:
