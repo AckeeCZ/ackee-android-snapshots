@@ -14,6 +14,7 @@ import io.github.ackeecz.snapshots.paparazzi.PaparazziSnapshotTests
 import io.github.ackeecz.snapshots.ui.theme.SnapshotsSampleTheme
 
 val fontScales = listOf(FontScale.NORMAL, FontScale.LARGE)
+val defaultFontScale = listOf(FontScale.NORMAL)
 
 val before = { _: Context ->
     // nothing
@@ -47,7 +48,7 @@ class LightComponentsSnapshotTests : PaparazziSnapshotTests(
 
 class DarkComponentsSnapshotTests : PaparazziSnapshotTests(
     before = before,
-    fontScales = emptyList(),
+    fontScales = defaultFontScale,
     showkasePreviews = componentPreviews,
     theme = theme,
     uiTheme = UiTheme.DARK,
@@ -70,7 +71,7 @@ class LightPortraitPhoneSnapshotTests : PaparazziSnapshotTests(
 
 class DarkPortraitPhoneSnapshotTests : PaparazziSnapshotTests(
     before = before,
-    fontScales = emptyList(),
+    fontScales = defaultFontScale,
     showkasePreviews = screenPreviews,
     theme = theme,
     uiTheme = UiTheme.DARK,
@@ -98,7 +99,7 @@ class LightLandscapePhoneSnapshotTests : PaparazziSnapshotTests(
 
 class DarkLandscapePhoneSnapshotTests : PaparazziSnapshotTests(
     before = before,
-    fontScales = emptyList(),
+    fontScales = defaultFontScale,
     showkasePreviews = screenPreviews,
     theme = theme,
     uiTheme = UiTheme.DARK,
@@ -126,7 +127,7 @@ class LightTabletSnapshotTests : PaparazziSnapshotTests(
 
 class DarkTabletSnapshotTests : PaparazziSnapshotTests(
     before = before,
-    fontScales = emptyList(),
+    fontScales = defaultFontScale,
     showkasePreviews = screenPreviews,
     theme = theme,
     uiTheme = UiTheme.DARK,
