@@ -34,3 +34,6 @@ google-services.json
 
 # Kotlin
 .kotlin
+
+# Claude
+.claude/plans
