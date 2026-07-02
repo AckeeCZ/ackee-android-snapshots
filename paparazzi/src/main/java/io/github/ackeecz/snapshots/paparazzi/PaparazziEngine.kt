@@ -55,7 +55,7 @@ class PaparazziEngine : SnapshotEngine {
 
     private companion object {
 
-        const val DEFAULT_THEME = "android:Theme.Material.Light.NoActionBar"
+        private const val DEFAULT_THEME = "android:Theme.Material.Light.NoActionBar"
     }
 }
 

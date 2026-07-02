@@ -15,8 +15,8 @@ get snapshots across devices, orientations, themes, and font scales.
 ## Module Structure
 
 ```
-:annotations   — Preview annotation metadata (PreviewSnapshotStrategy). Used in prod + test source sets. Published.
-:framework     — Core: SnapshotEngine / SnapshotStrategy contracts + AckeeSnapshotTests (Kotest) test-gen infra. Published.
+:annotations   — Preview tags (PreviewSnapshotKind) + per-preview override tokens (PreviewFontScale/PreviewUiMode/PreviewDevice). Used in prod + test source sets. Published.
+:framework     — Core: config DSL + resolver + SnapshotEngine SPI + AckeeSnapshotTests (Kotest) test-gen infra. Depends on :annotations. Published.
 :paparazzi     — Paparazzi-backed SnapshotEngine impl + PaparazziSnapshotTests. Published.
 :bom           — BOM (snapshots-bom); pins a compatible set of artifact versions. Published.
 :sample        — Example app + the reference snapshot tests. NOT published; excluded from API validation.
@@ -27,21 +27,30 @@ build-logic/   — Included build: convention plugins + release/verification tas
 
 The library is an **engine abstraction over a snapshot backend**.
 
-- **`SnapshotEngine`** (`:framework`) is the extension point: `init(strategy, uiTheme, funSpec)`,
-  `context`, `snapshot(content)`. To add a new backend, implement `SnapshotEngine` —
-  **`PaparazziEngine` (`:paparazzi`) is the reference impl.** Keep the split: `:framework` stays
-  backend-agnostic; anything Paparazzi-specific lives in `:paparazzi`.
-- **`AckeeSnapshotTests : FunSpec`** is the test-generation core: for each Showkase preview ×
-  `FontScale` it emits one Kotest `test(...)` that renders the Composable through the engine.
+- **`SnapshotEngine`** (`:framework`) is the extension point: `init(kind, device, uiMode, scope)`,
+  `context`, `snapshot(goldenName, content)`. The framework groups resolved variants by
+  `(kind, device, uiMode)` and creates a **fresh engine per group** (via an `engineFactory`), so
+  `init` runs exactly once per instance and backends need no cross-group state. To add a new backend,
+  implement `SnapshotEngine` — **`PaparazziEngine` (`:paparazzi`) is the reference impl.** Keep the
+  split: `:framework` stays backend-agnostic; anything Paparazzi-specific lives in `:paparazzi`.
+- **`AckeeSnapshotTests : FunSpec`** is the test-generation core: it takes a **config DSL** block
+  (`SnapshotConfigScope`), resolves it (`SnapshotResolver`) into the exact set of variants, groups them
+  by `(kind, device, uiMode)` into Kotest `context`s and registers one `test(...)` per variant.
   `PaparazziSnapshotTests` is the Paparazzi-wired convenience subclass consumers extend.
-- **`SnapshotStrategy`** (sealed interface):
+- **Render kind + device axis**: `SnapshotKind` (enum), chosen per preview by its tag —
   - `Component` — rendered at minimal size (Paparazzi `SHRINK`), device-independent.
-  - `Screen(DeviceConfig)` — rendered in the full device frame (Paparazzi `NORMAL`), per device + orientation.
-- **Config model**: `DeviceConfig(Device, DeviceOrientation)`, `Device` (PIXEL_6, NEXUS_10),
-  `UiTheme` (LIGHT/DARK → NightMode), `FontScale`.
-- **Strategy selection is data, not types**: consumers tag a `@ShowkaseComposable` with
-  `extraMetadata = [PreviewSnapshotStrategy.Component]` (from `:annotations`) and filter the Showkase
-  component list at the call site.
+  - `Screen` — rendered in the full device frame (Paparazzi `NORMAL`), once per configured `DeviceConfig`.
+  The device is a **separate axis** (not baked into the kind): enable it via `screens(vararg DeviceConfig)`.
+- **Config model**: `DeviceConfig(Device, DeviceOrientation)`, `Device` (PIXEL_6, NEXUS_10) with
+  `Device.Pixel6`/`Device.Nexus10` `.portrait`/`.landscape` `DeviceConfig` shortcuts, `UiMode`
+  (LIGHT/DARK → NightMode), `FontScale`. `SnapshotVariant(kind, device?, uiMode, fontScale)` is the
+  resolved coordinate and the `exclude` predicate receiver.
+- **Selection is data, not types**: consumers tag a `@ShowkaseComposable` with
+  `extraMetadata = [PreviewSnapshotKind.Component]` (from `:annotations`); the DSL's `components()` /
+  `screens(...)` enable the kinds and the resolver filters previews by their tag. Per-preview
+  exceptions are inline override tokens (`PreviewFontScale`/`PreviewUiMode`/`PreviewDevice`) or a named
+  `profile`, resolved `inline ?: profile ?: class` with `exclude` re-applied. Untagged / over-restricted
+  / name-colliding previews throw `SnapshotConfigException` at construction.
 
 ## Build & Compiler Configuration
 
@@ -93,9 +102,12 @@ library/application plugins — they are not applied directly in module build sc
 
 - **Kotest `FunSpec` everywhere** — both the snapshot infra and the build-logic suite. JUnit 5
   platform is the runner.
-- **Snapshot tests** extend `PaparazziSnapshotTests`. Paparazzi is a JUnit4 rule, so **one device per
-  test class** — write a separate class per device / orientation / theme / strategy combination (see
-  the `:sample` test classes and `README.md` for the canonical set).
+- **Snapshot tests** extend `PaparazziSnapshotTests` and pass a config DSL block. Paparazzi is a
+  JUnit4 rule (one fixed device per instance), but the framework groups variants by
+  `(kind, device, uiMode)` and creates a fresh engine per group, so **one class spans many devices /
+  UI modes / font scales** — no more one class per combination. `:sample` has one per-concern
+  `*SnapshotTests` class per feature (default matrix, exclude, profile / inline overrides, widening,
+  precedence); see those and `README.md`.
 - Golden images live in `sample/src/test/snapshots/images/`. Record with
   `./gradlew cleanRecordPaparazziDebug`; verify with `./gradlew verifyPaparazziDebug`. Commit golden
   changes with the code that changed them.
@@ -103,8 +115,12 @@ library/application plugins — they are not applied directly in module build sc
 - **`build-logic` tests** (the real unit-test suite) are the model for non-snapshot tests: Kotest
   `FunSpec`, `withData` for data-driven cases, **hand-written test doubles only** (suffix `*Stub`) —
   no MockK; project fixtures via `buildProject()` / `Factories` under `build-logic/src/test/.../testutil`.
-- The library modules (`:framework`, `:paparazzi`, `:annotations`) have **no** unit tests of their
-  own — they're exercised through the `:sample` snapshots. Add coverage there or in `:sample`.
+- **`:framework` has its own unit-test suite** (`framework/src/test`, Kotest `FunSpec`, hand-written
+  doubles — no MockK): the resolver, DSL building/validation, id assignment, token parsing, naming,
+  dedup/validation errors, the token→enum mapping, and `AckeeSnapshotTests` wiring (via a
+  `FakeSnapshotEngine`). `:paparazzi` unit-tests its pure mappings (`PaparazziMappingTest`).
+  `:annotations` has no unit tests. Rendering itself is exercised end-to-end through the `:sample`
+  snapshots — add rendering / e2e coverage there.
 
 ## Verification & Publishing
 

@@ -35,6 +35,9 @@ internal fun screenTagged(
     extraTokens: List<String> = emptyList(),
 ) = previewComponent(group, name, key, listOf(PreviewSnapshotKind.Screen) + extraTokens)
 
+// Mirrors the SnapshotConfig data class (exempt from the rule via ignoreDataClasses); the factory
+// only adds test-friendly defaults, so the parameter count matches by design.
+@Suppress("LongParameterList")
 internal fun snapshotConfig(
     previews: List<ShowkaseBrowserComponent>,
     componentsEnabled: Boolean = true,

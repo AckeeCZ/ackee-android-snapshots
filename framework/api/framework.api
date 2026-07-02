@@ -1,6 +1,6 @@
 public abstract class io/github/ackeecz/snapshots/framework/AckeeSnapshotTests : io/kotest/core/spec/style/FunSpec {
 	public static final field $stable I
-	public fun <init> (Lio/github/ackeecz/snapshots/framework/SnapshotEngine;Lkotlin/jvm/functions/Function1;)V
+	public fun <init> (Lkotlin/jvm/functions/Function0;Lkotlin/jvm/functions/Function1;)V
 }
 
 public final class io/github/ackeecz/snapshots/framework/ComposableSingletons$SnapshotConfigDefaultsKt {

@@ -18,6 +18,20 @@ explains the steps in a great detail. Otherwise you can use TLDR version.
    to update `CHANGELOG` if you were forced to publish more artifacts.
 7. Push the tag. CI will perform necessary checks and publish all artifacts.
 
+## Inter-artifact dependencies
+
+The publishing verification (`verifyPublishing`) is aware of the release-relevant dependencies
+between the published artifacts and derives them automatically from the Gradle project dependencies —
+you don't declare them anywhere else. The current edges are:
+
+- `:framework` → `:annotations`
+- `:paparazzi` → `:framework`
+
+Practical consequence: if `:annotations` changes and increases its version, `verifyPublishing` will
+force you to also release `:framework` (and, transitively, `:paparazzi`) so that a client resolving
+the BOM never mixes a newer internal artifact with older dependents. The BOM pins the whole set to a
+compatible combination, so bump the BOM whenever any of these are released together.
+
 ## Long version
 
 Once you are ready to publish new versions of library artifacts, you can start publishing process:
