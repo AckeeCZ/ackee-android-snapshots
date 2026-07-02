@@ -1,6 +1,10 @@
 package io.github.ackeecz.snapshots.annotations
 
-object PreviewSnapshotStrategy {
+/**
+ * Snapshot-kind tags for a preview's `@ShowkaseComposable` `extraMetadata`. Tag each snapshot preview
+ * with exactly one of these to declare how it is rendered.
+ */
+object PreviewSnapshotKind {
 
     /**
      * Components are rendered in a smallest possible size and are not
@@ -10,7 +14,7 @@ object PreviewSnapshotStrategy {
 
     /**
      * Screens are rendered within the full frame of the selected device
-     * and snapshots are taken for all devices.
+     * and snapshots are taken for the configured devices.
      */
     const val Screen = "screen"
 }

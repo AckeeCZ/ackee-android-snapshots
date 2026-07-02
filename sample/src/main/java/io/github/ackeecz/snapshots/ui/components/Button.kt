@@ -6,7 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.airbnb.android.showkase.annotation.ShowkaseComposable
-import io.github.ackeecz.snapshots.annotations.PreviewSnapshotStrategy
+import io.github.ackeecz.snapshots.annotations.PreviewSnapshotKind
 import io.github.ackeecz.snapshots.ui.theme.SnapshotsSampleTheme
 
 @Composable
@@ -17,7 +17,7 @@ fun PrimaryButton(modifier: Modifier = Modifier, text: String, onClick: () -> Un
 }
 
 @Preview
-@ShowkaseComposable(extraMetadata = [PreviewSnapshotStrategy.Component])
+@ShowkaseComposable(extraMetadata = [PreviewSnapshotKind.Component])
 @Composable
 fun PrimaryButtonPreview() {
     SnapshotsSampleTheme {

@@ -1,70 +1,63 @@
 package io.github.ackeecz.snapshots.framework
 
-import android.content.Context
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Density
-import com.airbnb.android.showkase.models.ShowkaseBrowserComponent
+import io.github.ackeecz.snapshots.framework.dsl.SnapshotConfigScope
+import io.github.ackeecz.snapshots.framework.dsl.SnapshotConfigScopeImpl
 import io.kotest.core.spec.style.FunSpec
 
-@Suppress("LongParameterList")
+/**
+ * Base Kotest [FunSpec] that generates snapshot tests from a config DSL. Subclass it, pass a
+ * [SnapshotEngine], and describe the snapshot matrix in the `config` block ([SnapshotConfigScope]).
+ *
+ * On construction it builds and resolves the config into the exact set of variants — the Cartesian of
+ * the enabled kinds, devices, UI modes and font scales, minus `exclude`d cells and after applying any
+ * per-preview overrides — then groups them by (kind, device, UI mode) into Kotest `context`s and
+ * registers one `test` per variant, each rendered through the engine.
+ *
+ * `PaparazziSnapshotTests` in the `:paparazzi` module is the ready-to-use, Paparazzi-backed subclass.
+ */
 abstract class AckeeSnapshotTests(
     engine: SnapshotEngine,
-    before: (context: Context) -> Unit,
-    fontScales: List<FontScale>,
-    showkasePreviews: List<ShowkaseBrowserComponent>,
-    uiTheme: UiTheme,
-    strategy: SnapshotStrategy,
-    theme: @Composable (UiTheme, @Composable () -> Unit) -> Unit,
+    config: SnapshotConfigScope.() -> Unit,
 ) : FunSpec({
-    engine.init(strategy, uiTheme, this)
-
-    beforeTest {
-        before(engine.context)
-    }
-    preparePreviews(showkasePreviews).forEach { componentPreview ->
-        fontScales.forEach { fontScale ->
-            test("${componentPreview}_${strategy.name}_fs=$fontScale") {
-                takeSnapshot(
-                    engine = engine,
-                    theme = theme,
-                    componentPreview = componentPreview,
-                    fontScale = fontScale
-                )
+    val snapshotConfig = SnapshotConfigScopeImpl().apply(config).build()
+    val resolved = SnapshotResolver().resolve(snapshotConfig)
+    resolved.groupBy { Triple(it.variant.kind, it.variant.device, it.variant.uiMode) }.forEach { (group, snapshots) ->
+        val (kind, device, uiMode) = group
+        context("${snapshotTargetLabel(device)}_$uiMode") {
+            engine.init(kind, device, uiMode, this)
+            snapshots.forEach { snapshot ->
+                test(snapshot.name) {
+                    takeSnapshot(
+                        snapshotConfig = snapshotConfig,
+                        engine = engine,
+                        snapshot = snapshot,
+                        uiMode = uiMode,
+                    )
+                }
             }
         }
     }
 })
 
 private fun takeSnapshot(
+    snapshotConfig: SnapshotConfig,
     engine: SnapshotEngine,
-    theme: @Composable (UiTheme, @Composable () -> Unit) -> Unit,
-    componentPreview: ComponentPreview,
-    fontScale: FontScale = FontScale.NORMAL,
-    uiTheme: UiTheme = UiTheme.LIGHT,
+    snapshot: ResolvedSnapshot,
+    uiMode: UiMode,
 ) {
-    engine.snapshot {
-        theme(uiTheme) {
-            val currentDensity = LocalDensity.current
+    engine.snapshot(snapshot.name) {
+        snapshotConfig.decorate(uiMode) {
             CompositionLocalProvider(
                 LocalDensity provides Density(
-                    density = currentDensity.density,
-                    fontScale = fontScale.scale
-                )
+                    density = LocalDensity.current.density,
+                    fontScale = snapshot.variant.fontScale.scale,
+                ),
             ) {
-                componentPreview.content()
+                snapshot.content()
             }
         }
     }
-}
-
-private fun preparePreviews(showkaseComponents: List<ShowkaseBrowserComponent>): List<ComponentPreview> {
-    val groupedComponents = showkaseComponents.groupBy { "${it.group}_${it.componentName}" }
-    return groupedComponents.flatMap { (key, components) ->
-        components.mapIndexed { index, showkaseBrowserComponent ->
-            val id = if (components.size == 1) key else "${key}_$index"
-            ComponentPreview(id, showkaseBrowserComponent)
-        }
-    }.sortedBy { it.toString() }
 }

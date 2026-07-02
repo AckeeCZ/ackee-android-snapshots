@@ -12,7 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.airbnb.android.showkase.annotation.ShowkaseComposable
-import io.github.ackeecz.snapshots.annotations.PreviewSnapshotStrategy
+import io.github.ackeecz.snapshots.annotations.PreviewSnapshotKind
 import io.github.ackeecz.snapshots.ui.theme.SnapshotsSampleTheme
 
 class MainActivity : ComponentActivity() {
@@ -48,7 +48,7 @@ private fun Greeting(name: String, modifier: Modifier = Modifier) {
 
 @Preview
 @ShowkaseComposable(
-    extraMetadata = [PreviewSnapshotStrategy.Screen]
+    extraMetadata = [PreviewSnapshotKind.Screen]
 )
 @Composable
 fun GreetingPreview() {
