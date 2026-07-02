@@ -14,6 +14,10 @@ jobs:
       # action needs to be first checked out by the checkout action.
       - name: Check out code
         uses: actions/checkout@v5
+        with:
+          # Snapshot golden images are stored in Git LFS; fetch them so verifyPaparazziDebug compares
+          # against real PNGs instead of LFS pointer files.
+          lfs: true
 
       - name: Setup
         uses: ./.github/actions/setup

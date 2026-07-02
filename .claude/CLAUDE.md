@@ -119,6 +119,10 @@ library/application plugins — they are not applied directly in module build sc
 - Golden images live in `sample/src/test/snapshots/images/`. Record with
   `./gradlew cleanRecordPaparazziDebug`; verify with `./gradlew verifyPaparazziDebug`. Commit golden
   changes with the code that changed them.
+- **Goldens are stored in Git LFS** — `.gitattributes` tracks `*.png` (repo-wide) with the LFS filter.
+  Contributors need `git-lfs` installed (`git lfs install`) so checkouts smudge pointers back into real
+  PNGs; otherwise `verifyPaparazziDebug` compares against pointer stubs. CI checkouts set `lfs: true`
+  (see `.github/workflows/`).
 - Test class naming: `*SnapshotTests`.
 - **`build-logic` tests** (the real unit-test suite) are the model for non-snapshot tests: Kotest
   `FunSpec`, `withData` for data-driven cases, **hand-written test doubles only** (suffix `*Stub`) —
