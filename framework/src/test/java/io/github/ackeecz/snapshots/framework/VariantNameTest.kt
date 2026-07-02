@@ -6,7 +6,7 @@ import io.kotest.matchers.shouldNotBe
 
 internal class VariantNameTest : FunSpec({
 
-    test("component variant name is id_component_uiMode_fs=fontScale") {
+    test("component variant name omits the device and is id_uiMode_FontScale.value") {
         val name = variantName(
             id = "Buttons_Primary",
             variant = SnapshotVariant(
@@ -17,10 +17,10 @@ internal class VariantNameTest : FunSpec({
             ),
         )
 
-        name shouldBe "Buttons_Primary_component_LIGHT_fs=NORMAL"
+        name shouldBe "Buttons_Primary_LIGHT_FontScale-NORMAL"
     }
 
-    test("screen variant name uses the device config name") {
+    test("screen variant name uses the source-mirroring device label") {
         val name = variantName(
             id = "Home_Screen",
             variant = SnapshotVariant(
@@ -31,7 +31,7 @@ internal class VariantNameTest : FunSpec({
             ),
         )
 
-        name shouldBe "Home_Screen_PIXEL_6_PORTRAIT_LIGHT_fs=LARGE"
+        name shouldBe "Home_Screen_Pixel6-portrait_LIGHT_FontScale-LARGE"
     }
 
     test("light and dark of the same preview produce distinct names") {
@@ -45,8 +45,8 @@ internal class VariantNameTest : FunSpec({
             ),
         )
 
-        name(UiMode.LIGHT) shouldBe "Card_Info_component_LIGHT_fs=NORMAL"
-        name(UiMode.DARK) shouldBe "Card_Info_component_DARK_fs=NORMAL"
+        name(UiMode.LIGHT) shouldBe "Card_Info_LIGHT_FontScale-NORMAL"
+        name(UiMode.DARK) shouldBe "Card_Info_DARK_FontScale-NORMAL"
         name(UiMode.LIGHT) shouldNotBe name(UiMode.DARK)
     }
 })

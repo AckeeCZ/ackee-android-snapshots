@@ -53,6 +53,12 @@ private fun takeSnapshot(
     snapshot: ResolvedSnapshot,
     uiMode: UiMode,
 ) {
+    // Run the optional per-test setup against the engine's prepared context (readied by the group's
+    // context-scoped `beforeEach`). The default no-op is skipped by identity so backends whose context
+    // is unavailable or only valid mid-render aren't forced to materialise one when nothing was requested.
+    if (snapshotConfig.before !== NO_OP_BEFORE) {
+        snapshotConfig.before(engine.context)
+    }
     engine.snapshot(snapshot.name) {
         snapshotConfig.decorate(uiMode) {
             CompositionLocalProvider(

@@ -101,6 +101,6 @@ internal class SnapshotResolverValidationTest : FunSpec({
     }
 
     test("the duplicate-name error names the colliding tests") {
-        resolveErrorMessage(collidingConfig) shouldContain "A_B_0_component_LIGHT_fs=NORMAL"
+        resolveErrorMessage(collidingConfig) shouldContain "A_B_0_LIGHT_FontScale-NORMAL"
     }
 })

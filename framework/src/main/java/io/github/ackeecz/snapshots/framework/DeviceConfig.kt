@@ -5,8 +5,26 @@ data class DeviceConfig(
     val orientation: DeviceOrientation,
 ) {
 
-    val name: String = "${device.name}_${orientation.name}"
+    /**
+     * Source-mirroring label, e.g. `Pixel6-portrait` — the `Device.Pixel6.portrait` shortcut with `-`
+     * joining the segments. Unlike the raw enum names it contains no `_`, so it reads as a single segment
+     * in a snapshot name; `-` (not `.`) is used because a `.` is rewritten to `_` by the Kotest test
+     * name → Paparazzi golden-file pipeline.
+     */
+    val name: String = "${device.label}-${orientation.label}"
 }
+
+internal val Device.label: String
+    get() = when (this) {
+        Device.PIXEL_6 -> "Pixel6"
+        Device.NEXUS_10 -> "Nexus10"
+    }
+
+internal val DeviceOrientation.label: String
+    get() = when (this) {
+        DeviceOrientation.LANDSCAPE -> "landscape"
+        DeviceOrientation.PORTRAIT -> "portrait"
+    }
 
 enum class Device {
     // phones

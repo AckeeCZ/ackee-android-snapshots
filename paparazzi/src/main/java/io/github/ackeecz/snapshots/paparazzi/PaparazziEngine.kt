@@ -31,9 +31,16 @@ class PaparazziEngine : SnapshotEngine {
             renderingMode = renderConfig.renderingMode,
             theme = DEFAULT_THEME,
         )
-        val groupLabel = "${device?.name ?: "component"}_$uiMode"
         scope.beforeEach { testCase ->
-            val description = Description.createTestDescription(testCase.spec::class.java.name, groupLabel)
+            // The golden identity is carried entirely by the JUnit Description:
+            //  - className = the spec FQN, so the golden path stays under the test class rather than the
+            //    Kotest context id, and its package/class casing is preserved verbatim;
+            //  - methodName = this test's variant name (equal to the goldenName passed to `snapshot`),
+            //    which Paparazzi keeps case-sensitive (only collapsing whitespace).
+            // We deliberately do NOT pass a `name` to `paparazzi.snapshot`, because Paparazzi lower-cases
+            // and whitespace-collapses that argument — which would corrupt the variant name (e.g. the
+            // device and UI mode) in the golden file name.
+            val description = Description.createTestDescription(testCase.spec::class.java.name, testCase.name.name)
             paparazzi.apply(base = NoopStatement, description = description).evaluate()
             paparazzi.prepare(description)
         }
@@ -41,7 +48,9 @@ class PaparazziEngine : SnapshotEngine {
     }
 
     override fun snapshot(goldenName: String, content: @Composable () -> Unit) {
-        paparazzi.snapshot(name = goldenName) { content() }
+        // `goldenName` already identifies this test through the Description built in [init] (it equals the
+        // Kotest test name); see the note there for why it is not passed to Paparazzi as a `name`.
+        paparazzi.snapshot { content() }
     }
 
     private companion object {
