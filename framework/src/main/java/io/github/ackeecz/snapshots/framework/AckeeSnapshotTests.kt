@@ -8,18 +8,22 @@ import io.github.ackeecz.snapshots.framework.dsl.SnapshotConfigScopeImpl
 import io.kotest.core.spec.style.FunSpec
 
 /**
- * Base Kotest [FunSpec] that generates snapshot tests from a config DSL. Subclass it, pass a
- * [SnapshotEngine], and describe the snapshot matrix in the `config` block ([SnapshotConfigScope]).
+ * Base Kotest [FunSpec] that generates snapshot tests from a config DSL. Subclass it, pass an
+ * [engineFactory], and describe the snapshot matrix in the `config` block ([SnapshotConfigScope]).
  *
  * On construction it builds and resolves the config into the exact set of variants — the Cartesian of
  * the enabled kinds, devices, UI modes and font scales, minus `exclude`d cells and after applying any
  * per-preview overrides — then groups them by (kind, device, UI mode) into Kotest `context`s and
  * registers one `test` per variant, each rendered through the engine.
  *
+ * A **fresh [SnapshotEngine] is created via [engineFactory] for each group**, so an engine instance is
+ * ever configured for and used by exactly one group. Backends therefore need no cross-group state
+ * management: `init` is called exactly once per instance.
+ *
  * `PaparazziSnapshotTests` in the `:paparazzi` module is the ready-to-use, Paparazzi-backed subclass.
  */
 abstract class AckeeSnapshotTests(
-    engine: SnapshotEngine,
+    engineFactory: () -> SnapshotEngine,
     config: SnapshotConfigScope.() -> Unit,
 ) : FunSpec({
     val snapshotConfig = SnapshotConfigScopeImpl().apply(config).build()
@@ -27,6 +31,7 @@ abstract class AckeeSnapshotTests(
     resolved.groupBy { Triple(it.variant.kind, it.variant.device, it.variant.uiMode) }.forEach { (group, snapshots) ->
         val (kind, device, uiMode) = group
         context("${snapshotTargetLabel(device)}_$uiMode") {
+            val engine = engineFactory()
             engine.init(kind, device, uiMode, this)
             snapshots.forEach { snapshot ->
                 test(snapshot.name) {

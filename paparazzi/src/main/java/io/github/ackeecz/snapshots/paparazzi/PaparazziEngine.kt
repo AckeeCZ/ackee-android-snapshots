@@ -12,9 +12,10 @@ import org.junit.runner.Description
 import org.junit.runners.model.Statement
 
 /**
- * [SnapshotEngine] backed by [Paparazzi]. One instance is driven per (kind, device, UI mode) group:
- * [init] builds a single [Paparazzi] for the group with its fixed device, night mode and rendering
- * mode, and wires the standard per-test `apply` lifecycle onto the group's Kotest container scope.
+ * [SnapshotEngine] backed by [Paparazzi]. A fresh instance is created per (kind, device, UI mode)
+ * group, so [init] builds this group's single [Paparazzi] once — with its fixed device, night mode and
+ * rendering mode — and wires the standard per-test `apply` lifecycle onto the group's Kotest container
+ * scope. No cross-group state to guard: this engine serves exactly one group.
  */
 class PaparazziEngine : SnapshotEngine {
 

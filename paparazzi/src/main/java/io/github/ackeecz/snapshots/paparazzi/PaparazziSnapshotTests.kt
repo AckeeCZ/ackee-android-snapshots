@@ -10,6 +10,6 @@ import io.github.ackeecz.snapshots.framework.dsl.SnapshotConfigScope
 abstract class PaparazziSnapshotTests(
     config: SnapshotConfigScope.() -> Unit,
 ) : AckeeSnapshotTests(
-    engine = PaparazziEngine(),
+    engineFactory = ::PaparazziEngine,
     config = config,
 )

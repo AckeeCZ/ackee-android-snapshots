@@ -10,6 +10,7 @@ import io.kotest.engine.TestEngineLauncher
 import io.kotest.engine.listener.CollectingTestEngineListener
 import io.kotest.matchers.collections.shouldContainAll
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
+import io.kotest.matchers.shouldBe
 
 @OptIn(KotestInternal::class)
 internal class AckeeSnapshotTestsTest : FunSpec({
@@ -35,7 +36,7 @@ internal class AckeeSnapshotTestsTest : FunSpec({
     val expectedGroupNames = expectedGroups.map { (_, device, uiMode) -> "${snapshotTargetLabel(device)}_$uiMode" }
     val expectedNames = resolved.map { it.name }
 
-    fun wiringSpec(engine: SnapshotEngine): AckeeSnapshotTests = object : AckeeSnapshotTests(engine, configBlock) {}
+    fun wiringSpec(engineFactory: () -> SnapshotEngine): AckeeSnapshotTests = object : AckeeSnapshotTests(engineFactory, configBlock) {}
 
     fun launchSpec(spec: Spec): CollectingTestEngineListener {
         val collector = CollectingTestEngineListener()
@@ -46,31 +47,40 @@ internal class AckeeSnapshotTestsTest : FunSpec({
         return collector
     }
 
+    fun launchRecordingSpec(): FakeSnapshotEngineFactory {
+        val factory = FakeSnapshotEngineFactory()
+        launchSpec(wiringSpec(factory))
+        return factory
+    }
+
     test("one context is opened per (kind, device, uiMode) group") {
-        val rootTests = wiringSpec(FakeSnapshotEngine()).rootTests()
+        val rootTests = wiringSpec(FakeSnapshotEngineFactory()).rootTests()
 
         rootTests.map { it.name.name } shouldContainExactlyInAnyOrder expectedGroupNames
     }
 
+    test("a fresh engine is created and initialised once per group") {
+        val factory = launchRecordingSpec()
+
+        factory.engines.size shouldBe expectedGroups.size
+        factory.engines.map { it.initCalls.size } shouldBe List(expectedGroups.size) { 1 }
+    }
+
     test("engine.init is called once per group with that group's kind, device and uiMode") {
-        val engine = FakeSnapshotEngine()
+        val factory = launchRecordingSpec()
 
-        launchSpec(wiringSpec(engine))
-
-        engine.initCalls shouldContainExactlyInAnyOrder expectedGroups
+        factory.allInitCalls shouldContainExactlyInAnyOrder expectedGroups
     }
 
     test("one test per ResolvedSnapshot is registered under its group's context") {
-        val collector = launchSpec(wiringSpec(FakeSnapshotEngine()))
+        val collector = launchSpec(wiringSpec(FakeSnapshotEngineFactory()))
 
         collector.names shouldContainAll expectedNames
     }
 
     test("each test invokes engine.snapshot with the resolver's golden name") {
-        val engine = FakeSnapshotEngine()
+        val factory = launchRecordingSpec()
 
-        launchSpec(wiringSpec(engine))
-
-        engine.snapshotNames shouldContainExactlyInAnyOrder expectedNames
+        factory.allSnapshotNames shouldContainExactlyInAnyOrder expectedNames
     }
 })
