@@ -6,6 +6,12 @@ plugins {
 
 android {
     namespace = "io.github.ackeecz.snapshots.paparazzi"
+
+    testOptions {
+        unitTests.all {
+            it.useJUnitPlatform()
+        }
+    }
 }
 
 dependencies {
@@ -18,4 +24,7 @@ dependencies {
 
     implementation(libs.paparazzi)
     implementation(libs.showkase.core)
+
+    testImplementation(platform(libs.junit5.bom))
+    testImplementation(libs.kotest.assertions.core)
 }
