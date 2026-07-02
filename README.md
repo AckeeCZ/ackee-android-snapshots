@@ -111,6 +111,36 @@ and specify dependencies
 testImplementation(libs.ackee.snapshots.paparazzi)
 ```
 
+## Experimental API
+
+The config DSL (the `PaparazziSnapshotTests { … }` block and everything inside it) and the
+`SnapshotEngine` extension point are annotated `@ExperimentalSnapshotsApi`. The library is stable and
+well-tested, but this surface may still change as it is exercised against more, and more complex,
+projects — marking it experimental lets us refine the API without an immediate breaking release.
+
+You must opt in. Either per test class / file:
+
+```kotlin
+import io.github.ackeecz.snapshots.annotations.ExperimentalSnapshotsApi
+
+@OptIn(ExperimentalSnapshotsApi::class)
+class SampleSnapshotTests : PaparazziSnapshotTests({ /* … */ })
+```
+
+…or once per Gradle module that holds snapshot tests:
+
+```kotlin
+// build.gradle.kts
+kotlin {
+    compilerOptions {
+        optIn.add("io.github.ackeecz.snapshots.annotations.ExperimentalSnapshotsApi")
+    }
+}
+```
+
+`ExperimentalSnapshotsApi` (opt-in level `WARNING`) ships in the `snapshots-annotations` artifact. For
+brevity, the remaining snippets in this README omit the annotation.
+
 ## Tagging previews
 
 Every preview you want to snapshot is a `@ShowkaseComposable` whose `extraMetadata` carries **exactly one** snapshot-kind tag from `PreviewSnapshotKind`:
@@ -150,6 +180,7 @@ fun HomeScreenPreview() {
 Subclass `PaparazziSnapshotTests` and describe the snapshot matrix in the config block. A single class can list both kinds and every axis:
 
 ```kotlin
+@OptIn(ExperimentalSnapshotsApi::class) // the config DSL is experimental — see "Experimental API"
 class SampleSnapshotTests : PaparazziSnapshotTests({
     // Required: the previews to snapshot. Every one must carry a PreviewSnapshotKind tag.
     previews(Showkase.getMetadata())

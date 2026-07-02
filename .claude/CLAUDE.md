@@ -61,6 +61,14 @@ Android-only — **not** Kotlin Multiplatform. Modules apply `com.android.librar
   read them there, never assume.
 - `allWarningsAsErrors = true` — even a deprecation warning fails the build.
 - `freeCompilerArgs += "-Xopt-in=kotlin.RequiresOptIn"`.
+- **Experimental API**: the config DSL (`SnapshotConfigScope`/`VariantsScope`/`ProfileOverrideScope`)
+  and `SnapshotEngine` are marked `@ExperimentalSnapshotsApi` (marker in `:annotations`, opt-in level
+  `WARNING`). Every module auto-opts-in via `optIn.add(...)` in `KotlinConventionPlugin`, so
+  internal/sample code needs no `@OptIn` and `allWarningsAsErrors` stays green; **consumers must opt
+  in** (per-site `@OptIn` or module-wide `optIn`). Applying the marker does *not* move the `.api`
+  dumps (BCV records the marker's own class in `annotations.api`, not annotation usages) — so widening
+  the experimental surface is not an ABI change. To mark a new declaration experimental, add
+  `@ExperimentalSnapshotsApi`; the module already sees the marker (`:annotations` is a universal dep).
 - Compose is enabled per module via the `ackeecz.snapshots.compose` convention plugin.
 - **No `explicitApi()` in the library modules** (only `build-logic` runs strict, via kotlin-dsl).
   Visibility is *not* compiler-enforced, so mark implementation types `internal` deliberately — the

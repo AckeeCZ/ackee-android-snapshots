@@ -1,5 +1,6 @@
 package io.github.ackeecz.snapshots.framework.dsl
 
+import io.github.ackeecz.snapshots.annotations.ExperimentalSnapshotsApi
 import io.github.ackeecz.snapshots.framework.DeviceConfig
 import io.github.ackeecz.snapshots.framework.FontScale
 import io.github.ackeecz.snapshots.framework.UiMode
@@ -8,6 +9,7 @@ import io.github.ackeecz.snapshots.framework.UiMode
  * Body of a named [VariantsScope.profile]. Each axis set here replaces the class-level axis for any
  * preview that references the profile; axes left unset fall through to the class config.
  */
+@ExperimentalSnapshotsApi
 @SnapshotDsl
 interface ProfileOverrideScope {
 

@@ -2,6 +2,7 @@ package io.github.ackeecz.snapshots.framework
 
 import android.content.Context
 import androidx.compose.runtime.Composable
+import io.github.ackeecz.snapshots.annotations.ExperimentalSnapshotsApi
 import io.kotest.core.spec.style.scopes.FunSpecContainerScope
 
 /**
@@ -13,6 +14,7 @@ import io.kotest.core.spec.style.scopes.FunSpecContainerScope
  * Implement this to add a new snapshot backend; `PaparazziEngine` in the `:paparazzi` module is the
  * reference implementation.
  */
+@ExperimentalSnapshotsApi
 interface SnapshotEngine {
 
     /**

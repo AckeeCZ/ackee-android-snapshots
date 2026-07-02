@@ -3,6 +3,7 @@ package io.github.ackeecz.snapshots.framework
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Density
+import io.github.ackeecz.snapshots.annotations.ExperimentalSnapshotsApi
 import io.github.ackeecz.snapshots.framework.dsl.SnapshotConfigScope
 import io.github.ackeecz.snapshots.framework.dsl.SnapshotConfigScopeImpl
 import io.kotest.core.spec.style.FunSpec
@@ -22,6 +23,7 @@ import io.kotest.core.spec.style.FunSpec
  *
  * `PaparazziSnapshotTests` in the `:paparazzi` module is the ready-to-use, Paparazzi-backed subclass.
  */
+@ExperimentalSnapshotsApi
 abstract class AckeeSnapshotTests(
     engineFactory: () -> SnapshotEngine,
     config: SnapshotConfigScope.() -> Unit,

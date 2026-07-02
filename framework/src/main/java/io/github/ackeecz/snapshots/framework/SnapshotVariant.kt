@@ -1,5 +1,7 @@
 package io.github.ackeecz.snapshots.framework
 
+import io.github.ackeecz.snapshots.annotations.ExperimentalSnapshotsApi
+
 /**
  * A single resolved snapshot coordinate — one cell of the (kind × device × UI mode × font scale)
  * matrix the resolver produces, and the value passed to a `variants { exclude { … } }` predicate.
@@ -10,6 +12,7 @@ package io.github.ackeecz.snapshots.framework
  * @property uiMode the UI mode (light or dark) the variant is rendered in.
  * @property fontScale the font scale the variant is rendered at.
  */
+@ExperimentalSnapshotsApi
 data class SnapshotVariant(
     val kind: SnapshotKind,
     val device: DeviceConfig?,

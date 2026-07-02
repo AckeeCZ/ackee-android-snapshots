@@ -1,5 +1,6 @@
 package io.github.ackeecz.snapshots.framework.dsl
 
+import io.github.ackeecz.snapshots.annotations.ExperimentalSnapshotsApi
 import io.github.ackeecz.snapshots.framework.DeviceConfig
 import io.github.ackeecz.snapshots.framework.FontScale
 import io.github.ackeecz.snapshots.framework.SnapshotVariant
@@ -10,6 +11,7 @@ import io.github.ackeecz.snapshots.framework.UiMode
  * the [uiModes] and [fontScales] axes into a Cartesian product, minus any [exclude]d cells; [profile]s
  * define named per-preview overrides.
  */
+@ExperimentalSnapshotsApi
 @SnapshotDsl
 interface VariantsScope {
 

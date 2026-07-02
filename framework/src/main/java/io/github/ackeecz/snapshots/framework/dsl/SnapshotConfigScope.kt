@@ -3,12 +3,14 @@ package io.github.ackeecz.snapshots.framework.dsl
 import android.content.Context
 import androidx.compose.runtime.Composable
 import com.airbnb.android.showkase.models.ShowkaseElementsMetadata
+import io.github.ackeecz.snapshots.annotations.ExperimentalSnapshotsApi
 import io.github.ackeecz.snapshots.framework.UiMode
 
 /**
  * Top-level receiver of the snapshot config DSL (see `AckeeSnapshotTests`). Declares the previews to
  * snapshot, optional per-test setup and decoration, and the variant matrix.
  */
+@ExperimentalSnapshotsApi
 @SnapshotDsl
 interface SnapshotConfigScope {
 
