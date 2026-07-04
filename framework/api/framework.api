@@ -6,7 +6,7 @@ public abstract class io/github/ackeecz/snapshots/framework/AckeeSnapshotTests :
 public final class io/github/ackeecz/snapshots/framework/ComposableSingletons$SnapshotConfigDefaultsKt {
 	public static final field INSTANCE Lio/github/ackeecz/snapshots/framework/ComposableSingletons$SnapshotConfigDefaultsKt;
 	public fun <init> ()V
-	public final fun getLambda$-103995576$framework_release ()Lkotlin/jvm/functions/Function4;
+	public final fun getLambda$-103995576$io_github_ackeecz_framework_release ()Lkotlin/jvm/functions/Function4;
 }
 
 public final class io/github/ackeecz/snapshots/framework/Device : java/lang/Enum {

@@ -2,9 +2,7 @@ package io.github.ackeecz.snapshots.plugin
 
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.api.plugins.ExtensionAware
-import org.gradle.kotlin.dsl.configure
-import org.jetbrains.kotlin.gradle.dsl.abi.AbiValidationExtension
+import org.jetbrains.kotlin.gradle.dsl.KotlinBaseExtension
 import org.jetbrains.kotlin.gradle.dsl.abi.ExperimentalAbiValidation
 
 internal class AndroidLibraryConventionPlugin : Plugin<Project> {
@@ -34,9 +32,8 @@ internal class AndroidLibraryConventionPlugin : Plugin<Project> {
     // gradle.properties and gradle/libs.versions.toml).
     @OptIn(ExperimentalAbiValidation::class)
     private fun Project.configureAbiValidation() {
-        val kotlin = extensions.getByName("kotlin") as ExtensionAware
-        kotlin.extensions.configure<AbiValidationExtension> {
-            enabled.set(true)
-        }
+        val kotlin = extensions.getByName("kotlin") as KotlinBaseExtension
+        // Kotlin 2.4 removed AbiValidationExtension.enabled; calling abiValidation() enables it.
+        kotlin.abiValidation()
     }
 }

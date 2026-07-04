@@ -9,6 +9,7 @@ import org.gradle.api.Project
 import org.gradle.api.publish.maven.tasks.PublishToMavenRepository
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.withType
+import org.jetbrains.dokka.gradle.DokkaExtension
 import java.net.URI
 import java.net.http.HttpClient
 import java.net.http.HttpRequest
@@ -24,6 +25,7 @@ internal class PublishingConventionPlugin : Plugin<Project> {
         // com.vanniktech.maven.publish plugin can detect and use applied Dokka plugin automatically
         pluginManager.apply(libs.plugins.dokka)
         pluginManager.apply(libs.plugins.gradle.maven.publish)
+        configureDokka()
 
         val libraryProperties = LibraryProperties(project)
         val artifactProperties = libraryProperties.getArtifactProperties()
@@ -72,6 +74,27 @@ internal class PublishingConventionPlugin : Plugin<Project> {
         )
         CheckIfUpdateNeededSinceCurrentTagTask.registerFor(project)
         VerifyPublishingTask.registerFor(project)
+    }
+}
+
+/**
+ * Works around Dokka issue #3701 ("Source sets ... have the common source roots").
+ *
+ * Because AGP 9's built-in Kotlin is disabled and the standalone kotlin-android plugin is applied
+ * instead (see the TODO in gradle.properties / gradle/libs.versions.toml), two Dokka source sets end
+ * up covering src/main: the plain `main` source set contributed by the Kotlin plugin and the AGP
+ * `release` variant source set (all other variants are auto-suppressed). Dokka's pre-generation
+ * validity check then fails because a Kotlin file must belong to exactly one source set. The `release`
+ * variant fully covers the main sources, so we suppress the redundant `main` source set. `configureEach`
+ * makes this a no-op if `main` ever stops being registered — revisit when built-in Kotlin is restored.
+ */
+private fun Project.configureDokka() {
+    extensions.configure<DokkaExtension> {
+        dokkaSourceSets.configureEach {
+            if (name == "main") {
+                suppress.set(true)
+            }
+        }
     }
 }
 

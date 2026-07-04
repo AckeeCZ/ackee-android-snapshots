@@ -4,8 +4,8 @@ description: Action that performs common setup tasks like setting up Java
 runs:
   using: "composite"
   steps:
-    - name: Set up JDK 17
-      uses: actions/setup-java@v4
+    - name: Set up JDK 21
+      uses: actions/setup-java@v5
       with:
-        java-version: '17'
-        distribution: 'corretto'
+        java-version: '21'
+        distribution: 'temurin'
