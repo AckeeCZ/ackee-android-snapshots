@@ -13,6 +13,10 @@ internal class KotlinConventionPlugin : Plugin<Project> {
     }
 
     private fun Project.configure() {
+        // AGP 9 has built-in Kotlin, but it does not wire the Kotlin Gradle Plugin's ABI validation.
+        // We therefore keep applying kotlin-android (with android.builtInKotlin=false) so that
+        // abiValidation (checkLegacyAbi) stays available on the published library modules. See the TODO
+        // in gradle/libs.versions.toml. Switch back to built-in Kotlin once AGP supports ABI validation.
         pluginManager.apply(libs.plugins.kotlin.android)
         tasks.withType<KotlinJvmCompile>().configureEach {
             compilerOptions {

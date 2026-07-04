@@ -1,9 +1,18 @@
+import org.gradle.api.tasks.testing.Test
+
 plugins {
     alias(libs.plugins.ackeecz.snapshots.android.application)
     alias(libs.plugins.ackeecz.snapshots.compose)
 
     alias(libs.plugins.kotlin.ksp)
     alias(libs.plugins.paparazzi)
+}
+
+// Paparazzi 2.0.0-alpha04 relies on Gradle internals for HTML test reports that break on Gradle 9
+// (required by AGP 9). Disable HTML reports for the Paparazzi test tasks as a workaround.
+// https://github.com/cashapp/paparazzi/issues/2111
+tasks.withType<Test>().configureEach {
+    reports.html.required = false
 }
 
 android {
