@@ -7,6 +7,8 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## BOM [3.0.0-paparazzialpha02] - 2026-07-05
+
 Major redesign of the snapshot API: a single **config DSL** on the test class replaces the old
 positional constructor, so one class now spans many kinds, devices, UI modes and font scales instead
 of one class per combination. Per-preview exceptions (inline `extraMetadata` tokens and named
