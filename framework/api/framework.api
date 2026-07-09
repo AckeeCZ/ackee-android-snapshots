@@ -1,13 +1,12 @@
 public abstract class io/github/ackeecz/snapshots/framework/AckeeSnapshotTests : io/kotest/core/spec/style/FunSpec {
 	public static final field $stable I
-	public fun <init> (Lio/github/ackeecz/snapshots/framework/SnapshotEngine;Lkotlin/jvm/functions/Function1;Ljava/util/List;Ljava/util/List;Lio/github/ackeecz/snapshots/framework/UiTheme;Lio/github/ackeecz/snapshots/framework/SnapshotStrategy;Lkotlin/jvm/functions/Function4;)V
+	public fun <init> (Lkotlin/jvm/functions/Function0;Lkotlin/jvm/functions/Function1;)V
 }
 
-public final class io/github/ackeecz/snapshots/framework/ComponentPreview {
-	public static final field $stable I
-	public fun <init> (Ljava/lang/String;Lcom/airbnb/android/showkase/models/ShowkaseBrowserComponent;)V
-	public final fun getContent ()Lkotlin/jvm/functions/Function2;
-	public fun toString ()Ljava/lang/String;
+public final class io/github/ackeecz/snapshots/framework/ComposableSingletons$SnapshotConfigDefaultsKt {
+	public static final field INSTANCE Lio/github/ackeecz/snapshots/framework/ComposableSingletons$SnapshotConfigDefaultsKt;
+	public fun <init> ()V
+	public final fun getLambda$-103995576$framework_release ()Lkotlin/jvm/functions/Function4;
 }
 
 public final class io/github/ackeecz/snapshots/framework/Device : java/lang/Enum {
@@ -16,6 +15,20 @@ public final class io/github/ackeecz/snapshots/framework/Device : java/lang/Enum
 	public static fun getEntries ()Lkotlin/enums/EnumEntries;
 	public static fun valueOf (Ljava/lang/String;)Lio/github/ackeecz/snapshots/framework/Device;
 	public static fun values ()[Lio/github/ackeecz/snapshots/framework/Device;
+}
+
+public final class io/github/ackeecz/snapshots/framework/Device$Nexus10 {
+	public static final field $stable I
+	public static final field INSTANCE Lio/github/ackeecz/snapshots/framework/Device$Nexus10;
+	public final fun getLandscape ()Lio/github/ackeecz/snapshots/framework/DeviceConfig;
+	public final fun getPortrait ()Lio/github/ackeecz/snapshots/framework/DeviceConfig;
+}
+
+public final class io/github/ackeecz/snapshots/framework/Device$Pixel6 {
+	public static final field $stable I
+	public static final field INSTANCE Lio/github/ackeecz/snapshots/framework/Device$Pixel6;
+	public final fun getLandscape ()Lio/github/ackeecz/snapshots/framework/DeviceConfig;
+	public final fun getPortrait ()Lio/github/ackeecz/snapshots/framework/DeviceConfig;
 }
 
 public final class io/github/ackeecz/snapshots/framework/DeviceConfig {
@@ -51,43 +64,73 @@ public final class io/github/ackeecz/snapshots/framework/FontScale : java/lang/E
 	public static fun values ()[Lio/github/ackeecz/snapshots/framework/FontScale;
 }
 
+public final class io/github/ackeecz/snapshots/framework/SnapshotConfigException : java/lang/RuntimeException {
+	public static final field $stable I
+	public fun <init> (Ljava/lang/String;)V
+}
+
 public abstract interface class io/github/ackeecz/snapshots/framework/SnapshotEngine {
 	public abstract fun getContext ()Landroid/content/Context;
-	public abstract fun init (Lio/github/ackeecz/snapshots/framework/SnapshotStrategy;Lio/github/ackeecz/snapshots/framework/UiTheme;Lio/kotest/core/spec/style/FunSpec;)V
-	public abstract fun snapshot (Lkotlin/jvm/functions/Function2;)V
+	public abstract fun init (Lio/github/ackeecz/snapshots/framework/SnapshotKind;Lio/github/ackeecz/snapshots/framework/DeviceConfig;Lio/github/ackeecz/snapshots/framework/UiMode;Lio/kotest/core/spec/style/scopes/FunSpecContainerScope;)V
+	public abstract fun snapshot (Ljava/lang/String;Lkotlin/jvm/functions/Function2;)V
 }
 
-public abstract interface class io/github/ackeecz/snapshots/framework/SnapshotStrategy {
-	public abstract fun getName ()Ljava/lang/String;
-}
-
-public final class io/github/ackeecz/snapshots/framework/SnapshotStrategy$Component : io/github/ackeecz/snapshots/framework/SnapshotStrategy {
-	public static final field $stable I
-	public static final field INSTANCE Lio/github/ackeecz/snapshots/framework/SnapshotStrategy$Component;
-	public fun equals (Ljava/lang/Object;)Z
-	public fun getName ()Ljava/lang/String;
-	public fun hashCode ()I
-	public fun toString ()Ljava/lang/String;
-}
-
-public final class io/github/ackeecz/snapshots/framework/SnapshotStrategy$Screen : io/github/ackeecz/snapshots/framework/SnapshotStrategy {
-	public static final field $stable I
-	public fun <init> (Lio/github/ackeecz/snapshots/framework/DeviceConfig;)V
-	public final fun component1 ()Lio/github/ackeecz/snapshots/framework/DeviceConfig;
-	public final fun copy (Lio/github/ackeecz/snapshots/framework/DeviceConfig;)Lio/github/ackeecz/snapshots/framework/SnapshotStrategy$Screen;
-	public static synthetic fun copy$default (Lio/github/ackeecz/snapshots/framework/SnapshotStrategy$Screen;Lio/github/ackeecz/snapshots/framework/DeviceConfig;ILjava/lang/Object;)Lio/github/ackeecz/snapshots/framework/SnapshotStrategy$Screen;
-	public fun equals (Ljava/lang/Object;)Z
-	public final fun getDeviceConfig ()Lio/github/ackeecz/snapshots/framework/DeviceConfig;
-	public fun getName ()Ljava/lang/String;
-	public fun hashCode ()I
-	public fun toString ()Ljava/lang/String;
-}
-
-public final class io/github/ackeecz/snapshots/framework/UiTheme : java/lang/Enum {
-	public static final field DARK Lio/github/ackeecz/snapshots/framework/UiTheme;
-	public static final field LIGHT Lio/github/ackeecz/snapshots/framework/UiTheme;
+public final class io/github/ackeecz/snapshots/framework/SnapshotKind : java/lang/Enum {
+	public static final field Component Lio/github/ackeecz/snapshots/framework/SnapshotKind;
+	public static final field Screen Lio/github/ackeecz/snapshots/framework/SnapshotKind;
 	public static fun getEntries ()Lkotlin/enums/EnumEntries;
-	public static fun valueOf (Ljava/lang/String;)Lio/github/ackeecz/snapshots/framework/UiTheme;
-	public static fun values ()[Lio/github/ackeecz/snapshots/framework/UiTheme;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/ackeecz/snapshots/framework/SnapshotKind;
+	public static fun values ()[Lio/github/ackeecz/snapshots/framework/SnapshotKind;
+}
+
+public final class io/github/ackeecz/snapshots/framework/SnapshotVariant {
+	public static final field $stable I
+	public fun <init> (Lio/github/ackeecz/snapshots/framework/SnapshotKind;Lio/github/ackeecz/snapshots/framework/DeviceConfig;Lio/github/ackeecz/snapshots/framework/UiMode;Lio/github/ackeecz/snapshots/framework/FontScale;)V
+	public final fun component1 ()Lio/github/ackeecz/snapshots/framework/SnapshotKind;
+	public final fun component2 ()Lio/github/ackeecz/snapshots/framework/DeviceConfig;
+	public final fun component3 ()Lio/github/ackeecz/snapshots/framework/UiMode;
+	public final fun component4 ()Lio/github/ackeecz/snapshots/framework/FontScale;
+	public final fun copy (Lio/github/ackeecz/snapshots/framework/SnapshotKind;Lio/github/ackeecz/snapshots/framework/DeviceConfig;Lio/github/ackeecz/snapshots/framework/UiMode;Lio/github/ackeecz/snapshots/framework/FontScale;)Lio/github/ackeecz/snapshots/framework/SnapshotVariant;
+	public static synthetic fun copy$default (Lio/github/ackeecz/snapshots/framework/SnapshotVariant;Lio/github/ackeecz/snapshots/framework/SnapshotKind;Lio/github/ackeecz/snapshots/framework/DeviceConfig;Lio/github/ackeecz/snapshots/framework/UiMode;Lio/github/ackeecz/snapshots/framework/FontScale;ILjava/lang/Object;)Lio/github/ackeecz/snapshots/framework/SnapshotVariant;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getDevice ()Lio/github/ackeecz/snapshots/framework/DeviceConfig;
+	public final fun getFontScale ()Lio/github/ackeecz/snapshots/framework/FontScale;
+	public final fun getKind ()Lio/github/ackeecz/snapshots/framework/SnapshotKind;
+	public final fun getUiMode ()Lio/github/ackeecz/snapshots/framework/UiMode;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/ackeecz/snapshots/framework/UiMode : java/lang/Enum {
+	public static final field DARK Lio/github/ackeecz/snapshots/framework/UiMode;
+	public static final field LIGHT Lio/github/ackeecz/snapshots/framework/UiMode;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/ackeecz/snapshots/framework/UiMode;
+	public static fun values ()[Lio/github/ackeecz/snapshots/framework/UiMode;
+}
+
+public abstract interface class io/github/ackeecz/snapshots/framework/dsl/ProfileOverrideScope {
+	public abstract fun devices ([Lio/github/ackeecz/snapshots/framework/DeviceConfig;)V
+	public abstract fun fontScales ([Lio/github/ackeecz/snapshots/framework/FontScale;)V
+	public abstract fun uiModes ([Lio/github/ackeecz/snapshots/framework/UiMode;)V
+}
+
+public abstract interface class io/github/ackeecz/snapshots/framework/dsl/SnapshotConfigScope {
+	public abstract fun before (Lkotlin/jvm/functions/Function1;)V
+	public abstract fun decorate (Lkotlin/jvm/functions/Function4;)V
+	public abstract fun previews (Lcom/airbnb/android/showkase/models/ShowkaseElementsMetadata;)V
+	public abstract fun variants (Lkotlin/jvm/functions/Function1;)V
+}
+
+public abstract interface annotation class io/github/ackeecz/snapshots/framework/dsl/SnapshotDsl : java/lang/annotation/Annotation {
+}
+
+public abstract interface class io/github/ackeecz/snapshots/framework/dsl/VariantsScope {
+	public abstract fun components ()V
+	public abstract fun exclude (Lkotlin/jvm/functions/Function1;)V
+	public abstract fun fontScales ([Lio/github/ackeecz/snapshots/framework/FontScale;)V
+	public abstract fun profile (Ljava/lang/String;Lkotlin/jvm/functions/Function1;)V
+	public abstract fun screens ([Lio/github/ackeecz/snapshots/framework/DeviceConfig;)V
+	public abstract fun uiModes ([Lio/github/ackeecz/snapshots/framework/UiMode;)V
 }
 

@@ -6,10 +6,19 @@ plugins {
 
 android {
     namespace = "io.github.ackeecz.snapshots.paparazzi"
+
+    testOptions {
+        unitTests.all {
+            it.useJUnitPlatform()
+        }
+    }
 }
 
 dependencies {
     implementation(projects.framework)
+    // Needed so the module-wide @ExperimentalSnapshotsApi opt-in resolves (implementation deps are
+    // not transitive), and to opt in to the experimental SnapshotEngine that PaparazziEngine implements.
+    implementation(projects.annotations)
 
     implementation(libs.kotest.runner.junit5)
 
@@ -18,4 +27,7 @@ dependencies {
 
     implementation(libs.paparazzi)
     implementation(libs.showkase.core)
+
+    testImplementation(platform(libs.junit5.bom))
+    testImplementation(libs.kotest.assertions.core)
 }

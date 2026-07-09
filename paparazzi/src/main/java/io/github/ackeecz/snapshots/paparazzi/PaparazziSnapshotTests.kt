@@ -1,26 +1,17 @@
 package io.github.ackeecz.snapshots.paparazzi
 
-import android.content.Context
-import androidx.compose.runtime.Composable
-import com.airbnb.android.showkase.models.ShowkaseBrowserComponent
+import io.github.ackeecz.snapshots.annotations.ExperimentalSnapshotsApi
 import io.github.ackeecz.snapshots.framework.AckeeSnapshotTests
-import io.github.ackeecz.snapshots.framework.FontScale
-import io.github.ackeecz.snapshots.framework.SnapshotStrategy
-import io.github.ackeecz.snapshots.framework.UiTheme
+import io.github.ackeecz.snapshots.framework.dsl.SnapshotConfigScope
 
+/**
+ * Ready-to-use, Paparazzi-backed [AckeeSnapshotTests]. Subclass it and describe the snapshot matrix in
+ * the `config` block; snapshots are rendered on the JVM with [PaparazziEngine].
+ */
+@ExperimentalSnapshotsApi
 abstract class PaparazziSnapshotTests(
-    before: (context: Context) -> Unit,
-    fontScales: List<FontScale>,
-    showkasePreviews: List<ShowkaseBrowserComponent>,
-    uiTheme: UiTheme,
-    strategy: SnapshotStrategy,
-    theme: @Composable (UiTheme, @Composable () -> Unit) -> Unit
+    config: SnapshotConfigScope.() -> Unit,
 ) : AckeeSnapshotTests(
-    engine = PaparazziEngine(),
-    before = before,
-    fontScales = fontScales,
-    showkasePreviews = showkasePreviews,
-    uiTheme = uiTheme,
-    strategy = strategy,
-    theme = theme
+    engineFactory = ::PaparazziEngine,
+    config = config,
 )

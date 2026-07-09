@@ -21,6 +21,11 @@ internal class KotlinConventionPlugin : Plugin<Project> {
                 freeCompilerArgs.addAll(
                     "-Xopt-in=kotlin.RequiresOptIn",
                 )
+                // Auto opt-in for the library's own experimental marker, so internal/sample code can
+                // use experimental APIs without per-site @OptIn and without tripping allWarningsAsErrors.
+                // Consumers still opt in explicitly. The marker lives in :annotations, which every
+                // module depends on, so this FQN resolves everywhere the convention is applied.
+                optIn.add("io.github.ackeecz.snapshots.annotations.ExperimentalSnapshotsApi")
             }
         }
     }

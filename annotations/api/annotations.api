@@ -1,6 +1,30 @@
-public final class io/github/ackeecz/snapshots/annotations/PreviewSnapshotStrategy {
+public abstract interface annotation class io/github/ackeecz/snapshots/annotations/ExperimentalSnapshotsApi : java/lang/annotation/Annotation {
+}
+
+public final class io/github/ackeecz/snapshots/annotations/PreviewDevice {
+	public static final field INSTANCE Lio/github/ackeecz/snapshots/annotations/PreviewDevice;
+	public static final field Nexus10Landscape Ljava/lang/String;
+	public static final field Nexus10Portrait Ljava/lang/String;
+	public static final field Pixel6Landscape Ljava/lang/String;
+	public static final field Pixel6Portrait Ljava/lang/String;
+}
+
+public final class io/github/ackeecz/snapshots/annotations/PreviewFontScale {
+	public static final field INSTANCE Lio/github/ackeecz/snapshots/annotations/PreviewFontScale;
+	public static final field Large Ljava/lang/String;
+	public static final field Normal Ljava/lang/String;
+	public static final field Small Ljava/lang/String;
+}
+
+public final class io/github/ackeecz/snapshots/annotations/PreviewSnapshotKind {
 	public static final field Component Ljava/lang/String;
-	public static final field INSTANCE Lio/github/ackeecz/snapshots/annotations/PreviewSnapshotStrategy;
+	public static final field INSTANCE Lio/github/ackeecz/snapshots/annotations/PreviewSnapshotKind;
 	public static final field Screen Ljava/lang/String;
+}
+
+public final class io/github/ackeecz/snapshots/annotations/PreviewUiMode {
+	public static final field Dark Ljava/lang/String;
+	public static final field INSTANCE Lio/github/ackeecz/snapshots/annotations/PreviewUiMode;
+	public static final field Light Ljava/lang/String;
 }
 
