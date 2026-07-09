@@ -19,7 +19,7 @@ internal class KotlinConventionPlugin : Plugin<Project> {
                 jvmTarget.set(Constants.COMPILE_JVM_TARGET)
                 allWarningsAsErrors.set(true)
                 freeCompilerArgs.addAll(
-                    "-Xopt-in=kotlin.RequiresOptIn",
+                    "-opt-in=kotlin.RequiresOptIn",
                 )
                 // Auto opt-in for the library's own experimental marker, so internal/sample code can
                 // use experimental APIs without per-site @OptIn and without tripping allWarningsAsErrors.
