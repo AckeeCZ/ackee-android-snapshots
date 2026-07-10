@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project adheres
 to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## BOM [3.1.0-paparazzialpha05] - 2026-07-05
+## BOM [3.1.0-paparazzialpha05] - 2026-07-10
 
 Dependency and build-toolchain update. No new features and no public API or behavioral changes to the
 library itself, but the published artifacts now require a newer consumer toolchain (see below). The BOM
