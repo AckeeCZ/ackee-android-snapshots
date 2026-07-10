@@ -5,7 +5,37 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project adheres
 to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## BOM [3.1.0-paparazzialpha05] - 2026-07-05
+
+Dependency and build-toolchain update. No new features and no public API or behavioral changes to the
+library itself, but the published artifacts now require a newer consumer toolchain (see below). The BOM
+re-pins the whole set; `annotations` is functionally unchanged and is re-released only to keep the BOM
+on a single base version.
+
+> ⚠️ To upgrade, consumers must move their build to **AGP 9**, **Gradle 9**, **Kotlin 2.4** and
+> **compileSdk 37**, and — for the Paparazzi engine — use **Paparazzi ≥ 2.0.0-alpha05**. Re-record your
+> goldens afterwards (`./gradlew cleanRecordPaparazziDebug`); the newer Compose / LayoutLib renders some
+> pixels differently.
+
+### framework
+- Recompiled against Kotlin 2.4, Compose BOM 2026.06.01 and newer AndroidX. No source-level public API
+  change — the committed ABI dump moved only because Kotlin 2.4 re-mangles the name of a synthetic
+  Compose accessor (an internal `ComposableSingletons` lambda), which consumers never reference.
+
+### paparazzi
+- Updated Paparazzi `2.0.0-alpha02` → `2.0.0-alpha05`; the `paparazzi` / `bom` version suffix moves to
+  `-paparazzialpha05` accordingly. `PaparazziEngine` was adapted to Paparazzi's newer lifecycle
+  (`teardown()` / `setup()`); no public API change.
+
+### annotations
+- No changes; re-released at `3.1.0` only to keep the BOM set on a single base version.
+
+### build & tooling (internal)
+- Migrated the convention plugins to the AGP 9 Android DSL; bumped Gradle to `9.6.1` and
+  `compileSdk` / `targetSdk` to `37`. Added a Gradle dependency-updates check.
+- Replaced the standalone Binary Compatibility Validator with the Kotlin Gradle Plugin's built-in ABI
+  validation (`checkLegacyAbi` / `updateLegacyAbi`); the committed `.api` dump format is unchanged.
+- Also updated Kotest, JUnit, Dokka and vanniktech-maven-publish.
 
 ## BOM [3.0.0-paparazzialpha02] - 2026-07-09
 

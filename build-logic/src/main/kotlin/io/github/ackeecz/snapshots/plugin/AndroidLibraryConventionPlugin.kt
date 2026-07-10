@@ -2,6 +2,8 @@ package io.github.ackeecz.snapshots.plugin
 
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.jetbrains.kotlin.gradle.dsl.KotlinBaseExtension
+import org.jetbrains.kotlin.gradle.dsl.abi.ExperimentalAbiValidation
 
 internal class AndroidLibraryConventionPlugin : Plugin<Project> {
 
@@ -14,9 +16,24 @@ internal class AndroidLibraryConventionPlugin : Plugin<Project> {
         androidConventionPlugin.apply(target)
         detektConventionPlugin.apply(target)
         kotlinConventionPlugin.apply(target)
+        // Run after KotlinConventionPlugin applies kotlin-android, which is what registers the
+        // abiValidation extension.
+        target.configureAbiValidation()
     }
 
     private fun Project.configure() {
         pluginManager.apply(libs.plugins.android.library)
+    }
+
+    // Public API/ABI is tracked with the Kotlin Gradle Plugin's ABI validation. It provides the
+    // checkLegacyAbi / updateLegacyAbi tasks and keeps the committed <module>/api/<module>.api format.
+    // This is wired by the kotlin-android plugin (applied by KotlinConventionPlugin); AGP's built-in
+    // Kotlin does not register it, which is why built-in Kotlin is currently disabled (see the TODOs in
+    // gradle.properties and gradle/libs.versions.toml).
+    @OptIn(ExperimentalAbiValidation::class)
+    private fun Project.configureAbiValidation() {
+        val kotlin = extensions.getByName("kotlin") as KotlinBaseExtension
+        // Kotlin 2.4 removed AbiValidationExtension.enabled; calling abiValidation() enables it.
+        kotlin.abiValidation()
     }
 }

@@ -38,23 +38,23 @@ internal class AckeeSnapshotTestsTest : FunSpec({
 
     fun wiringSpec(engineFactory: () -> SnapshotEngine): AckeeSnapshotTests = object : AckeeSnapshotTests(engineFactory, configBlock) {}
 
-    fun launchSpec(spec: Spec): CollectingTestEngineListener {
+    suspend fun launchSpec(spec: Spec): CollectingTestEngineListener {
         val collector = CollectingTestEngineListener()
         TestEngineLauncher()
             .withListener(collector)
             .withSpecRefs(SpecRef.Function({ spec }, spec::class, spec::class.java.name))
-            .launch()
+            .execute()
         return collector
     }
 
-    fun launchRecordingSpec(): FakeSnapshotEngineFactory {
+    suspend fun launchRecordingSpec(): FakeSnapshotEngineFactory {
         val factory = FakeSnapshotEngineFactory()
         launchSpec(wiringSpec(factory))
         return factory
     }
 
     test("one context is opened per (kind, device, uiMode) group") {
-        val rootTests = wiringSpec(FakeSnapshotEngineFactory()).rootTests()
+        val rootTests = wiringSpec(FakeSnapshotEngineFactory()).tests()
 
         rootTests.map { it.name.name } shouldContainExactlyInAnyOrder expectedGroupNames
     }

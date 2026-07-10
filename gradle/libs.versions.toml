@@ -1,20 +1,18 @@
 [versions]
-android-activityCompose = "1.11.0"
-android-core = "1.17.0"
-android-gradlePlugin = "8.13.0"
-android-lifecycle = "2.9.3"
-composeBom = "2025.09.00"
+android-activityCompose = "1.13.0"
+android-core = "1.19.0"
+android-gradlePlugin = "9.2.1"
+android-lifecycle = "2.11.0"
+composeBom = "2026.06.01"
 detekt = "1.23.8"
-dokka = "2.0.0"
-gradle-maven-publish = "0.34.0"
-junit5Bom = "5.13.4"
-kotest = "6.0.3"
-# TODO Replace by embedded validator in Kotlin Gradle Plugin. Currently embedded validator does not
-#  work for some reason and just produces empty .api files.
-kotlin-binaryCompatibilityValidator = "0.18.1"
-kotlin = "2.2.20"
-ksp = "2.2.20-2.0.3"
-paparazzi = "2.0.0-alpha02"
+dokka = "2.2.0"
+gradle-maven-publish = "0.37.0"
+gradle-versions = "0.54.0"
+junit5Bom = "6.1.1"
+kotest = "6.2.1"
+kotlin = "2.4.0"
+ksp = "2.3.9"
+paparazzi = "2.0.0-alpha05"
 showkase = "1.0.5"
 
 [libraries]
@@ -42,7 +40,9 @@ showkase-processor = { module = "com.airbnb.android:showkase-processor", version
 # Build-logic dependencies
 android-gradlePlugin = { module = "com.android.tools.build:gradle", version.ref = "android-gradlePlugin" }
 detekt-gradlePlugin = { module = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin", version.ref = "detekt" }
+dokka-gradlePlugin = { module = "org.jetbrains.dokka:dokka-gradle-plugin", version.ref = "dokka" }
 gradle-maven-publish-gradlePlugin = { module = "com.vanniktech.maven.publish:com.vanniktech.maven.publish.gradle.plugin", version.ref = "gradle-maven-publish" }
+gradle-versions-gradlePlugin = { module = "com.github.ben-manes:gradle-versions-plugin", version.ref = "gradle-versions" }
 kotlin-gradlePlugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 
 [plugins]
@@ -51,8 +51,12 @@ android-library = { id = "com.android.library", version.ref = "android-gradlePlu
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
 dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
 gradle-maven-publish = { id = "com.vanniktech.maven.publish", version.ref = "gradle-maven-publish" }
+gradle-versions = { id = "com.github.ben-manes.versions", version.ref = "gradle-versions" }
+# TODO Temporary: AGP 9's built-in Kotlin does not wire the Kotlin Gradle Plugin's ABI validation
+#  (abiValidation / checkLegacyAbi), so we keep the standalone kotlin-android plugin (with
+#  android.builtInKotlin=false) to retain the API/ABI gate. Switch back to built-in Kotlin and drop
+#  this once AGP wires ABI validation for built-in Kotlin.
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
-kotlin-binaryCompatibilityValidator = { id = "org.jetbrains.kotlinx.binary-compatibility-validator", version.ref = "kotlin-binaryCompatibilityValidator" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlin-ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 paparazzi = { id = "app.cash.paparazzi", version.ref = "paparazzi" }
@@ -61,5 +65,6 @@ paparazzi = { id = "app.cash.paparazzi", version.ref = "paparazzi" }
 ackeecz-snapshots-android-application = { id = "ackeecz.snapshots.android.application" }
 ackeecz-snapshots-android-library = { id = "ackeecz.snapshots.android.library" }
 ackeecz-snapshots-compose = { id = "ackeecz.snapshots.compose" }
+ackeecz-snapshots-dependency-updates = { id = "ackeecz.snapshots.dependency.updates" }
 ackeecz-snapshots-preflightchecks = { id = "ackeecz.snapshots.preflightchecks" }
 ackeecz-snapshots-publishing = { id = "ackeecz.snapshots.publishing" }

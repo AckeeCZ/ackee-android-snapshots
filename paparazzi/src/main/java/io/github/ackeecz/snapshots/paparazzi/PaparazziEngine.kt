@@ -3,18 +3,17 @@ package io.github.ackeecz.snapshots.paparazzi
 import android.content.Context
 import androidx.compose.runtime.Composable
 import app.cash.paparazzi.Paparazzi
+import app.cash.paparazzi.TestName
 import io.github.ackeecz.snapshots.framework.DeviceConfig
 import io.github.ackeecz.snapshots.framework.SnapshotEngine
 import io.github.ackeecz.snapshots.framework.SnapshotKind
 import io.github.ackeecz.snapshots.framework.UiMode
 import io.kotest.core.spec.style.scopes.FunSpecContainerScope
-import org.junit.runner.Description
-import org.junit.runners.model.Statement
 
 /**
  * [SnapshotEngine] backed by [Paparazzi]. A fresh instance is created per (kind, device, UI mode)
  * group, so [init] builds this group's single [Paparazzi] once — with its fixed device, night mode and
- * rendering mode — and wires the standard per-test `apply` lifecycle onto the group's Kotest container
+ * rendering mode — and wires the per-test `setup`/`teardown` lifecycle onto the group's Kotest container
  * scope. No cross-group state to guard: this engine serves exactly one group.
  */
 class PaparazziEngine : SnapshotEngine {
@@ -32,19 +31,26 @@ class PaparazziEngine : SnapshotEngine {
             theme = DEFAULT_THEME,
         )
         scope.beforeEach { testCase ->
-            // The golden identity is carried entirely by the JUnit Description:
-            //  - className = the spec FQN, so the golden path stays under the test class rather than the
-            //    Kotest context id, and its package/class casing is preserved verbatim;
+            // The golden identity is carried entirely by the Paparazzi TestName:
+            //  - packageName/className = derived from the spec FQN, so the golden path stays under the test
+            //    class rather than the Kotest context id, and its package/class casing is preserved verbatim.
+            //    We split the FQN exactly as Paparazzi's own Description->TestName conversion does (package =
+            //    everything before the last '.', class = everything after);
             //  - methodName = this test's variant name (equal to the goldenName passed to `snapshot`),
             //    which Paparazzi keeps case-sensitive (only collapsing whitespace).
             // We deliberately do NOT pass a `name` to `paparazzi.snapshot`, because Paparazzi lower-cases
             // and whitespace-collapses that argument — which would corrupt the variant name (e.g. the
             // device and UI mode) in the golden file name.
-            val description = Description.createTestDescription(testCase.spec::class.java.name, testCase.name.name)
-            paparazzi.apply(base = NoopStatement, description = description).evaluate()
-            paparazzi.prepare(description)
+            val specName = testCase.spec::class.java.name
+            paparazzi.setup(
+                TestName(
+                    packageName = specName.substringBeforeLast('.', ""),
+                    className = specName.substringAfterLast('.'),
+                    methodName = testCase.name.name,
+                ),
+            )
         }
-        scope.afterEach { paparazzi.close() }
+        scope.afterEach { paparazzi.teardown() }
     }
 
     override fun snapshot(goldenName: String, content: @Composable () -> Unit) {
@@ -57,9 +63,4 @@ class PaparazziEngine : SnapshotEngine {
 
         private const val DEFAULT_THEME = "android:Theme.Material.Light.NoActionBar"
     }
-}
-
-private object NoopStatement : Statement() {
-
-    override fun evaluate() = Unit
 }

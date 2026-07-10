@@ -80,7 +80,7 @@ internal abstract class RegisterPreflightChecksPlugin : Plugin<Project> {
 
         private fun Task.dependsOnBinaryCompatibilityCheck() {
             dependsOnTaskFromProjects(
-                taskName = "apiCheck",
+                taskName = "checkLegacyAbi",
                 projects = currentProject.subprojects,
             )
         }

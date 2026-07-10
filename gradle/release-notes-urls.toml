@@ -1,0 +1,41 @@
+# gradle/release-notes-urls.toml
+# Maps Maven coordinates and Gradle plugin IDs to release-notes URLs.
+# Run /find-release-notes to populate; manual edits preserved across runs.
+
+[libraries]
+"androidx.activity:activity-compose" = "https://developer.android.com/jetpack/androidx/releases/activity"
+"androidx.core:core-ktx" = "https://developer.android.com/jetpack/androidx/releases/core"
+"androidx.lifecycle:lifecycle-runtime" = "https://developer.android.com/jetpack/androidx/releases/lifecycle"
+"androidx.compose.material3:material3" = "https://developer.android.com/jetpack/androidx/releases/compose-material3"
+"androidx.compose:compose-bom" = "https://developer.android.com/jetpack/androidx/releases/compose"
+"androidx.compose.ui:ui" = "https://developer.android.com/jetpack/androidx/releases/compose-ui"
+"androidx.compose.ui:ui-tooling" = "https://developer.android.com/jetpack/androidx/releases/compose-ui"
+"androidx.compose.ui:ui-tooling-preview" = "https://developer.android.com/jetpack/androidx/releases/compose-ui"
+"io.gitlab.arturbosch.detekt:detekt-formatting" = "https://github.com/detekt/detekt/releases"
+"org.junit:junit-bom" = "https://github.com/junit-team/junit-framework/releases"
+"io.kotest:kotest-assertions-core" = "https://github.com/kotest/kotest/releases"
+"io.kotest:kotest-runner-junit5" = "https://github.com/kotest/kotest/releases"
+"app.cash.paparazzi:paparazzi" = "https://github.com/cashapp/paparazzi/blob/HEAD/CHANGELOG.md"
+"com.airbnb.android:showkase" = "https://github.com/airbnb/Showkase/releases"
+"com.airbnb.android:showkase-processor" = "https://github.com/airbnb/Showkase/releases"
+"com.android.tools.build:gradle" = "https://developer.android.com/build/releases/agp-x-x-x-release-notes"
+"io.gitlab.arturbosch.detekt:detekt-gradle-plugin" = "https://github.com/detekt/detekt/releases"
+"com.vanniktech.maven.publish:com.vanniktech.maven.publish.gradle.plugin" = "https://github.com/vanniktech/gradle-maven-publish-plugin/blob/HEAD/CHANGELOG.md"
+"com.github.ben-manes:gradle-versions-plugin" = "https://github.com/ben-manes/gradle-versions-plugin/releases"
+"org.jetbrains.kotlin:kotlin-gradle-plugin" = "https://github.com/JetBrains/kotlin/blob/HEAD/ChangeLog.md"
+
+[plugins]
+"com.android.application" = "https://developer.android.com/build/releases/agp-x-x-x-release-notes"
+"com.android.library" = "https://developer.android.com/build/releases/agp-x-x-x-release-notes"
+"io.gitlab.arturbosch.detekt" = "https://github.com/detekt/detekt/releases"
+"org.jetbrains.dokka" = "https://github.com/Kotlin/dokka/releases"
+"com.vanniktech.maven.publish" = "https://github.com/vanniktech/gradle-maven-publish-plugin/blob/HEAD/CHANGELOG.md"
+"com.github.ben-manes.versions" = "https://github.com/ben-manes/gradle-versions-plugin/releases"
+"org.jetbrains.kotlin.android" = "https://github.com/JetBrains/kotlin/blob/HEAD/ChangeLog.md"
+"org.jetbrains.kotlin.plugin.compose" = "https://github.com/JetBrains/kotlin/blob/HEAD/ChangeLog.md"
+"com.google.devtools.ksp" = "https://github.com/google/ksp/releases"
+"app.cash.paparazzi" = "https://github.com/cashapp/paparazzi/blob/HEAD/CHANGELOG.md"
+
+[unresolved]
+# Entries the skill could not auto-detect. Fill in manually, then move to [libraries] or [plugins].
+# Keys here are the same shape as their target section.

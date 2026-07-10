@@ -27,7 +27,7 @@ runs:
 
     - name: Binary compatibility check
       shell: bash
-      run: ./gradlew apiCheck
+      run: ./gradlew checkLegacyAbi
 
     - name: Build logic tests
       shell: bash

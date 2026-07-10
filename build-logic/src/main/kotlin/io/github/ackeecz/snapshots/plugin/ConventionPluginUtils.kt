@@ -1,7 +1,6 @@
 package io.github.ackeecz.snapshots.plugin
 
 import com.android.build.api.dsl.CommonExtension
-import com.android.build.gradle.BaseExtension
 import org.gradle.accessors.dm.LibrariesForLibs
 import org.gradle.api.Project
 import org.gradle.api.artifacts.MinimalExternalModuleDependency
@@ -15,12 +14,8 @@ import java.util.Optional
 
 internal val Project.libs get() = the<LibrariesForLibs>()
 
-internal fun Project.androidCommon(action: CommonExtension<*, *, *, *, *, *>.() -> Unit) {
+internal fun Project.androidCommon(action: CommonExtension.() -> Unit) {
     extensions.configure(CommonExtension::class, action)
-}
-
-internal fun Project.androidBase(action: BaseExtension.() -> Unit) {
-    extensions.configure(BaseExtension::class, action)
 }
 
 internal fun PluginManager.apply(plugin: Provider<PluginDependency>) {

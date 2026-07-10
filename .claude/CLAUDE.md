@@ -66,8 +66,8 @@ Android-only — **not** Kotlin Multiplatform. Modules apply `com.android.librar
   `WARNING`). Every module auto-opts-in via `optIn.add(...)` in `KotlinConventionPlugin`, so
   internal/sample code needs no `@OptIn` and `allWarningsAsErrors` stays green; **consumers must opt
   in** (per-site `@OptIn` or module-wide `optIn`). Applying the marker does *not* move the `.api`
-  dumps (BCV records the marker's own class in `annotations.api`, not annotation usages) — so widening
-  the experimental surface is not an ABI change. To mark a new declaration experimental, add
+  dumps (the ABI dump records the marker's own class in `annotations.api`, not annotation usages) — so
+  widening the experimental surface is not an ABI change. To mark a new declaration experimental, add
   `@ExperimentalSnapshotsApi`; the module already sees the marker (`:annotations` is a universal dep).
 - Compose is enabled per module via the `ackeecz.snapshots.compose` convention plugin.
 - **No `explicitApi()` in the library modules** (only `build-logic` runs strict, via kotlin-dsl).
@@ -76,22 +76,29 @@ Android-only — **not** Kotlin Multiplatform. Modules apply `com.android.librar
 
 ## API / ABI Validation
 
-Public API is tracked with the **standalone Binary Compatibility Validator** plugin
-(`org.jetbrains.kotlinx.binary-compatibility-validator`), enabled at the root `build.gradle.kts`.
-The Kotlin-embedded validator is intentionally *not* used — it currently emits empty `.api` files
-(see the TODO in `gradle/libs.versions.toml`).
+Public API is tracked with the **Kotlin Gradle Plugin's built-in ABI validation** (`abiValidation`,
+enabled per library module in `AndroidLibraryConventionPlugin`), using its **legacy dump** so the
+committed `.api` format is unchanged.
 
 - Dumps live at `<module>/api/<module>.api` and are committed. Any change to a `public` declaration
   must be reflected there.
-- `:sample` is excluded (`apiValidation { ignoredProjects.add("sample") }`).
+- `:sample` is excluded: `abiValidation` is enabled only for library modules (it defaults to disabled),
+  so `:sample`'s `checkLegacyAbi` is a no-op.
+- **AGP 9 caveat (temporary):** AGP's built-in Kotlin does *not* wire `abiValidation`, so the project
+  keeps the `org.jetbrains.kotlin.android` plugin with `android.builtInKotlin=false` +
+  `android.newDsl=false` (see the TODOs in `gradle.properties` / `gradle/libs.versions.toml`). When AGP
+  wires ABI validation for built-in Kotlin, drop those two flags + the kotlin-android plugin and
+  re-enable built-in Kotlin. `checkLegacyAbi`/`updateLegacyAbi` are themselves deprecated in favor of
+  the new-format `checkKotlinAbi`/`updateKotlinAbi`; we stay on the legacy dump to keep the committed
+  `.api` format.
 
 Workflow when public API changes:
 
-1. `./gradlew apiDump` to regenerate dumps.
+1. `./gradlew updateLegacyAbi` to regenerate dumps.
 2. Commit the dumps with the code change.
 
-`apiCheck` fails the build (and `preMergeRequestCheck` / CI) when the committed dump is stale. If the
-dump didn't move, the change wasn't public.
+`checkLegacyAbi` fails the build (and `preMergeRequestCheck` / CI) when the committed dump is stale. If
+the dump didn't move, the change wasn't public.
 
 ## Convention Plugins (`build-logic/`)
 
@@ -143,7 +150,7 @@ library/application plugins — they are not applied directly in module build sc
 ```
 
 It runs, across the relevant projects: `detekt` + `assembleRelease` + library `testDebugUnitTest` +
-sample `verifyPaparazziDebug` + `apiCheck` + build-logic `:test`. It is kept **in sync with CI**
+sample `verifyPaparazziDebug` + `checkLegacyAbi` + build-logic `:test`. It is kept **in sync with CI**
 (`.github/actions/basic-preflight-check`, `.github/workflows/`) — if you change what it runs, update
 CI too (the task source comments say so explicitly).
 

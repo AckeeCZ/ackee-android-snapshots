@@ -16,7 +16,7 @@ internal class ComposeConventionPlugin : Plugin<Project> {
     private fun Project.configureCompose() {
         pluginManager.apply(libs.plugins.kotlin.compose)
         androidCommon {
-            buildFeatures {
+            buildFeatures.apply {
                 compose = true
             }
         }
