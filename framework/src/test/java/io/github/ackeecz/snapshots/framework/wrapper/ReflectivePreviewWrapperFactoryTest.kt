@@ -3,9 +3,9 @@ package io.github.ackeecz.snapshots.framework.wrapper
 import io.github.ackeecz.snapshots.framework.wrapper.fixtures.FrameWrapper
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
-import io.kotest.matchers.types.shouldNotBeSameInstanceAs
 import io.kotest.matchers.string.shouldContain
 import io.kotest.matchers.types.shouldBeInstanceOf
+import io.kotest.matchers.types.shouldNotBeSameInstanceAs
 
 private const val FIXTURES = "io.github.ackeecz.snapshots.framework.wrapper.fixtures"
 private const val FRAME_WRAPPER = "$FIXTURES.FrameWrapper"

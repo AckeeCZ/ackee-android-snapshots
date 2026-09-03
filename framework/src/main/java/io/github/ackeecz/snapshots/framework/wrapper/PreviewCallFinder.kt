@@ -1,7 +1,6 @@
 package io.github.ackeecz.snapshots.framework.wrapper
 
 import io.github.ackeecz.snapshots.framework.PreviewFunction
-import org.objectweb.asm.ClassReader
 import org.objectweb.asm.ClassVisitor
 import org.objectweb.asm.MethodVisitor
 
@@ -30,13 +29,14 @@ internal class PreviewCallFinder(private val bytes: ClassBytesSource) {
     }
 
     private fun nestedClassNames(hostName: String, hostBytes: ByteArray): List<String> {
-        val prefix = "${hostName.replace('.', '/')}$"
+        val prefix = "${hostName.toInternalName()}$"
         val names = mutableListOf<String>()
-        hostBytes.accept(hostName, 
+        hostBytes.accept(
+            hostName,
             object : ClassVisitor(ASM_API) {
 
                 override fun visitInnerClass(name: String, outerName: String?, innerName: String?, access: Int) {
-                    if (name.startsWith(prefix)) names += name.replace('/', '.')
+                    if (name.startsWith(prefix)) names += name.toBinaryName()
                 }
             },
         )
@@ -45,7 +45,8 @@ internal class PreviewCallFinder(private val bytes: ClassBytesSource) {
 
     private fun findCall(className: String, classBytes: ByteArray, functionName: String): PreviewFunction? {
         var found: PreviewFunction? = null
-        classBytes.accept(className, 
+        classBytes.accept(
+            className,
             object : ClassVisitor(ASM_API) {
 
                 override fun visitMethod(
@@ -64,7 +65,7 @@ internal class PreviewCallFinder(private val bytes: ClassBytesSource) {
                         isInterface: Boolean,
                     ) {
                         if (found == null && matchesKotlinName(callName, functionName)) {
-                            found = PreviewFunction(className = owner.replace('/', '.'), functionName = callName)
+                            found = PreviewFunction(className = owner.toBinaryName(), functionName = callName)
                         }
                     }
                 }
@@ -73,10 +74,5 @@ internal class PreviewCallFinder(private val bytes: ClassBytesSource) {
         return found
     }
 
-    private fun ByteArray.accept(className: String, visitor: ClassVisitor) = acceptClass(className, visitor, SKIP_UNNEEDED)
-
-    private companion object {
-
-        const val SKIP_UNNEEDED = ClassReader.SKIP_DEBUG or ClassReader.SKIP_FRAMES
-    }
+    private fun ByteArray.accept(className: String, visitor: ClassVisitor) = acceptClass(className, visitor, SKIP_DEBUG_AND_FRAMES)
 }

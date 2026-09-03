@@ -1,6 +1,6 @@
 package io.github.ackeecz.snapshots.framework.wrapper
 
-import com.airbnb.android.showkase.models.ShowkaseBrowserComponent
+import io.github.ackeecz.snapshots.framework.previewComponent
 import io.github.ackeecz.snapshots.framework.wrapper.fixtures.FixtureObject
 
 /** The class loader holding the compiled Showkase-like fixtures. */
@@ -14,12 +14,4 @@ internal fun fixtureComponent(
     group: String = "Cards",
     name: String = "Card",
     styleName: String? = null,
-) = ShowkaseBrowserComponent(
-    componentKey = key,
-    group = group,
-    componentName = name,
-    componentKDoc = "",
-    component = {},
-    styleName = styleName,
-    extraMetadata = emptyList(),
-)
+) = previewComponent(group = group, name = name, key = key, styleName = styleName)

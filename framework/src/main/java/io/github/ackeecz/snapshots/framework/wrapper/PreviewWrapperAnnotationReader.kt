@@ -11,12 +11,13 @@ import org.objectweb.asm.Type
  * Reads the `@PreviewWrapper` that applies to a preview function from its declaring class's bytecode,
  * following custom preview annotations recursively.
  */
-internal class PreviewWrapperAnnotationReader(private val bytes: ClassBytesSource) {
+internal class PreviewWrapperAnnotationReader(rawBytes: ClassBytesSource) {
 
-    private val classBytesCache = mutableMapOf<String, ByteArray?>()
+    // Cached because previews sharing a facade or a custom preview annotation would otherwise re-read the same bytes.
+    private val bytes: ClassBytesSource = CachingClassBytesSource(rawBytes)
 
     fun read(function: PreviewFunction): AnnotationLookup {
-        val classBytes = classBytes(function.className)
+        val classBytes = bytes.read(function.className)
             ?: return AnnotationLookup.Unreadable("its declaring class '${function.className}' is not on the test classpath")
         val annotations = methodAnnotations(function.className, classBytes, function.functionName)
         return if (annotations == null) {
@@ -44,7 +45,7 @@ internal class PreviewWrapperAnnotationReader(private val bytes: ClassBytesSourc
 
     private fun collectInherited(annotationClassName: String, into: MutableSet<String>, visited: MutableSet<String>) {
         if (!visited.add(annotationClassName)) return
-        val annotations = classBytes(annotationClassName)?.let { classAnnotations(annotationClassName, it) } ?: return
+        val annotations = bytes.read(annotationClassName)?.let { classAnnotations(annotationClassName, it) } ?: return
         val direct = annotations.firstNotNullOfOrNull { it.wrapperClassName }
         if (direct != null) {
             into += direct
@@ -53,16 +54,10 @@ internal class PreviewWrapperAnnotationReader(private val bytes: ClassBytesSourc
         }
     }
 
-    // Cached because previews sharing a facade or a custom preview annotation would otherwise re-read the same bytes.
-    private fun classBytes(binaryName: String): ByteArray? = if (binaryName in classBytesCache) {
-        classBytesCache[binaryName]
-    } else {
-        bytes.read(binaryName).also { classBytesCache[binaryName] = it }
-    }
-
     private fun methodAnnotations(className: String, classBytes: ByteArray, functionName: String): List<AnnotationRef>? {
         var annotations: MutableList<AnnotationRef>? = null
-        classBytes.accept(className, 
+        classBytes.accept(
+            className,
             object : ClassVisitor(ASM_API) {
 
                 override fun visitMethod(
@@ -87,7 +82,8 @@ internal class PreviewWrapperAnnotationReader(private val bytes: ClassBytesSourc
 
     private fun classAnnotations(className: String, classBytes: ByteArray): List<AnnotationRef> {
         val annotations = mutableListOf<AnnotationRef>()
-        classBytes.accept(className, 
+        classBytes.accept(
+            className,
             object : ClassVisitor(ASM_API) {
 
                 override fun visitAnnotation(descriptor: String, visible: Boolean) = annotationRefVisitor(descriptor, annotations)
@@ -108,7 +104,7 @@ internal class PreviewWrapperAnnotationReader(private val bytes: ClassBytesSourc
     }
 
     private fun ByteArray.accept(className: String, visitor: ClassVisitor) =
-        acceptClass(className, visitor, ClassReader.SKIP_CODE or ClassReader.SKIP_DEBUG or ClassReader.SKIP_FRAMES)
+        acceptClass(className, visitor, ClassReader.SKIP_CODE or SKIP_DEBUG_AND_FRAMES)
 
     private class AnnotationRef(val className: String, var wrapperClassName: String? = null)
 

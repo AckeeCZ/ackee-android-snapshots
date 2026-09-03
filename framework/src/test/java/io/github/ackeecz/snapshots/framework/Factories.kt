@@ -12,12 +12,14 @@ internal fun previewComponent(
     name: String = "Preview",
     key: String = "$group:$name",
     extraMetadata: List<String> = emptyList(),
+    styleName: String? = null,
 ) = ShowkaseBrowserComponent(
     componentKey = key,
     group = group,
     componentName = name,
     componentKDoc = "",
     component = {},
+    styleName = styleName,
     extraMetadata = extraMetadata,
 )
 

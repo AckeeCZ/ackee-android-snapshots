@@ -14,9 +14,10 @@ internal class BytecodePreviewWrapperResolver(
     private val classLoader: ClassLoader = frameworkClassLoader,
 ) : PreviewWrapperResolver {
 
+    private val cachedBytes = CachingClassBytesSource(bytes)
     private val keyParser = ShowkaseKeyParser()
-    private val callFinder = PreviewCallFinder(bytes)
-    private val annotationReader = PreviewWrapperAnnotationReader(bytes)
+    private val callFinder = PreviewCallFinder(cachedBytes)
+    private val annotationReader = PreviewWrapperAnnotationReader(cachedBytes)
 
     override fun resolve(component: ShowkaseBrowserComponent): WrapperResolution = try {
         resolveWrapper(component)

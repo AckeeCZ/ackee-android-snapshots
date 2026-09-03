@@ -10,5 +10,5 @@ internal fun interface ClassBytesSource {
 internal class ClassLoaderBytesSource(private val classLoader: ClassLoader) : ClassBytesSource {
 
     override fun read(binaryName: String): ByteArray? =
-        classLoader.getResourceAsStream("${binaryName.replace('.', '/')}.class")?.use { it.readBytes() }
+        classLoader.getResourceAsStream("${binaryName.toInternalName()}.class")?.use { it.readBytes() }
 }
