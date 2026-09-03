@@ -48,6 +48,7 @@ internal fun snapshotConfig(
     fontScales: List<FontScale> = listOf(FontScale.NORMAL),
     excludes: List<(SnapshotVariant) -> Boolean> = emptyList(),
     profiles: Map<String, ProfileOverride> = emptyMap(),
+    previewWrappers: PreviewWrappers = PreviewWrappers.Disabled,
 ) = SnapshotConfig(
     previews = previews,
     componentsEnabled = componentsEnabled,
@@ -56,4 +57,5 @@ internal fun snapshotConfig(
     fontScales = fontScales,
     excludes = excludes,
     profiles = profiles,
+    previewWrappers = previewWrappers,
 )

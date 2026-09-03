@@ -5,6 +5,7 @@ import androidx.compose.runtime.Composable
 import com.airbnb.android.showkase.models.ShowkaseBrowserComponent
 import com.airbnb.android.showkase.models.ShowkaseElementsMetadata
 import io.github.ackeecz.snapshots.framework.NO_OP_BEFORE
+import io.github.ackeecz.snapshots.framework.PreviewWrappers
 import io.github.ackeecz.snapshots.framework.SnapshotConfig
 import io.github.ackeecz.snapshots.framework.SnapshotConfigException
 import io.github.ackeecz.snapshots.framework.UiMode
@@ -14,6 +15,7 @@ internal class SnapshotConfigScopeImpl : SnapshotConfigScope {
     private var previews: List<ShowkaseBrowserComponent>? = null
     private var before: (Context) -> Unit = NO_OP_BEFORE
     private var decorate: (@Composable (UiMode, @Composable () -> Unit) -> Unit)? = null
+    private var previewWrappers: PreviewWrappers = PreviewWrappers.Enabled()
     private var variantsScope: VariantsScopeImpl? = null
 
     override fun previews(metadata: ShowkaseElementsMetadata) {
@@ -28,6 +30,10 @@ internal class SnapshotConfigScopeImpl : SnapshotConfigScope {
         decorate = block
     }
 
+    override fun previewWrappers(wrappers: PreviewWrappers) {
+        previewWrappers = wrappers
+    }
+
     override fun variants(block: VariantsScope.() -> Unit) {
         variantsScope = VariantsScopeImpl().apply(block)
     }
@@ -36,7 +42,12 @@ internal class SnapshotConfigScopeImpl : SnapshotConfigScope {
         val previews = previews.orThrow("previews(...) is required")
         val decorate = decorate.orThrow("decorate { } is required")
         val variants = variantsScope.orThrow("variants { } block is required")
-        return variants.build(previews = previews, before = before, decorate = decorate)
+        return variants.build(
+            previews = previews,
+            before = before,
+            decorate = decorate,
+            previewWrappers = previewWrappers,
+        )
     }
 
     private fun <T> T?.orThrow(message: String): T = this ?: throw SnapshotConfigException(message)

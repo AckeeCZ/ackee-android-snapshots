@@ -5,6 +5,8 @@ import com.airbnb.android.showkase.models.ShowkaseBrowserComponent
 import io.github.ackeecz.snapshots.framework.Device
 import io.github.ackeecz.snapshots.framework.FontScale
 import io.github.ackeecz.snapshots.framework.NO_OP_BEFORE
+import io.github.ackeecz.snapshots.framework.PreviewFunction
+import io.github.ackeecz.snapshots.framework.PreviewWrappers
 import io.github.ackeecz.snapshots.framework.ProfileOverride
 import io.github.ackeecz.snapshots.framework.SnapshotConfig
 import io.github.ackeecz.snapshots.framework.SnapshotConfigException
@@ -14,6 +16,7 @@ import io.github.ackeecz.snapshots.framework.metadataOf
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.types.shouldBeInstanceOf
 import io.kotest.matchers.types.shouldBeSameInstanceAs
 
 private val PIXEL_PORTRAIT = Device.Pixel6.portrait
@@ -35,11 +38,13 @@ internal class SnapshotConfigScopeTest : FunSpec({
         variants(variants)
     }
 
-    val minimalConfig = configWith {
+    val minimalVariants: VariantsScope.() -> Unit = {
         components()
         uiModes(UiMode.LIGHT)
         fontScales(FontScale.NORMAL)
     }
+
+    val minimalConfig = configWith(minimalVariants)
 
     test("previews, uiModes and fontScales are captured") {
         val preview = componentTagged(group = "G", name = "P")
@@ -163,5 +168,43 @@ internal class SnapshotConfigScopeTest : FunSpec({
                 }
             }
         }
+    }
+
+    test("previewWrappers defaults to Enabled without a locator") {
+        minimalConfig.previewWrappers.shouldBeInstanceOf<PreviewWrappers.Enabled>().locate shouldBe null
+    }
+
+    test("previewWrappers(Disabled) is captured") {
+        val config = buildConfig {
+            requiredBase()
+            previewWrappers(PreviewWrappers.Disabled)
+            variants(minimalVariants)
+        }
+
+        config.previewWrappers shouldBe PreviewWrappers.Disabled
+    }
+
+    test("previewWrappers(Enabled { }) captures the locator instance") {
+        val locate: (ShowkaseBrowserComponent) -> PreviewFunction? = { null }
+        val enabled = PreviewWrappers.Enabled(locate)
+
+        val config = buildConfig {
+            requiredBase()
+            previewWrappers(enabled)
+            variants(minimalVariants)
+        }
+
+        config.previewWrappers shouldBeSameInstanceAs enabled
+    }
+
+    test("the last previewWrappers call wins") {
+        val config = buildConfig {
+            requiredBase()
+            previewWrappers(PreviewWrappers.Enabled())
+            previewWrappers(PreviewWrappers.Disabled)
+            variants(minimalVariants)
+        }
+
+        config.previewWrappers shouldBe PreviewWrappers.Disabled
     }
 })
