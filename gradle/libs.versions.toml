@@ -3,7 +3,8 @@ android-activityCompose = "1.13.0"
 android-core = "1.19.0"
 android-gradlePlugin = "9.2.1"
 android-lifecycle = "2.11.0"
-composeBom = "2026.06.01"
+asm = "9.9.1"
+composeBom = "2026.08.00"
 detekt = "1.23.8"
 dokka = "2.2.0"
 gradle-maven-publish = "0.37.0"
@@ -20,6 +21,7 @@ androidx-activity-compose = { group = "androidx.activity", name = "activity-comp
 androidx-core = { group = "androidx.core", name = "core-ktx", version.ref = "android-core" }
 androidx-lifecycle-runtime = { group = "androidx.lifecycle", name = "lifecycle-runtime", version.ref = "android-lifecycle" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
+asm = { module = "org.ow2.asm:asm", version.ref = "asm" }
 
 compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
 compose-ui = { group = "androidx.compose.ui", name = "ui" }
