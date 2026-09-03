@@ -7,5 +7,5 @@ internal data class ResolvedSnapshot(
     val name: String,
     val variant: SnapshotVariant,
     val content: @Composable () -> Unit,
-    val wrapper: PreviewWrapperFactory? = null,
+    val wrapper: PreviewWrapperFactory?,
 )

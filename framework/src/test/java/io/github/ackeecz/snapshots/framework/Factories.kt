@@ -3,6 +3,9 @@ package io.github.ackeecz.snapshots.framework
 import com.airbnb.android.showkase.models.ShowkaseBrowserComponent
 import com.airbnb.android.showkase.models.ShowkaseElementsMetadata
 import io.github.ackeecz.snapshots.annotations.PreviewSnapshotKind
+import io.github.ackeecz.snapshots.framework.wrapper.FakePreviewWrapperResolver
+import io.github.ackeecz.snapshots.framework.wrapper.RecordingWrapperResolverFactory
+import io.github.ackeecz.snapshots.framework.wrapper.WrapperResolution
 
 internal fun metadataOf(vararg components: ShowkaseBrowserComponent) =
     ShowkaseElementsMetadata(componentList = components.toList())
@@ -59,3 +62,7 @@ internal fun snapshotConfig(
     profiles = profiles,
     previewWrappers = previewWrappers,
 )
+
+/** A [RecordingWrapperResolverFactory] whose resolver serves the given `componentKey` -> [WrapperResolution] map. */
+internal fun resolutionsOf(vararg resolutions: Pair<String, WrapperResolution>) =
+    RecordingWrapperResolverFactory(FakePreviewWrapperResolver(mapOf(*resolutions)))

@@ -269,9 +269,6 @@ internal class SnapshotResolverTest : FunSpec({
             config: SnapshotConfig,
         ): List<ResolvedSnapshot> = SnapshotResolver(wrapperResolverFactory = resolverFactory).resolve(config)
 
-        fun resolutionsOf(vararg resolutions: Pair<String, WrapperResolution>) =
-            RecordingWrapperResolverFactory(FakePreviewWrapperResolver(mapOf(*resolutions)))
-
         test("a Wrapped resolution attaches its factory to every variant of that preview") {
             val config = wrapperConfig(listOf(componentTagged(key = "p1")))
 

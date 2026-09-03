@@ -29,11 +29,14 @@ internal class SnapshotResolver(
                 return@flatMap emptyList()
             }
 
-            val resolution = wrapperResolver?.resolve(preview.component)
-            if (resolution is WrapperResolution.Failed) {
-                errors += "Preview '${preview.id}' ${resolution.reason}"
+            val wrapper = when (val resolution = wrapperResolver?.resolve(preview.component)) {
+                is WrapperResolution.Wrapped -> resolution.factory
+                is WrapperResolution.Failed -> {
+                    errors += "Preview '${preview.id}' ${resolution.reason}"
+                    null
+                }
+                WrapperResolution.Unwrapped, null -> null
             }
-            val wrapper = (resolution as? WrapperResolution.Wrapped)?.factory
             variants.map { variant ->
                 ResolvedSnapshot(
                     name = variantName(preview.id, variant),

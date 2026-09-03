@@ -17,9 +17,6 @@ internal class SnapshotResolverValidationTest : FunSpec({
         underTest = SnapshotResolver()
     }
 
-    fun wrapperFactoryWith(vararg resolutions: Pair<String, WrapperResolution>) =
-        RecordingWrapperResolverFactory(FakePreviewWrapperResolver(mapOf(*resolutions)))
-
     fun resolveErrorMessage(config: SnapshotConfig): String =
         shouldThrow<SnapshotConfigException> { underTest.resolve(config) }.message ?: ""
 
@@ -129,10 +126,11 @@ internal class SnapshotResolverValidationTest : FunSpec({
     }
 
     test("a Failed resolution throws naming the preview id and the reason") {
-        val config = snapshotConfig(previews = listOf(componentTagged(group = "My", name = "Widget", key = "broken")),
+        val config = snapshotConfig(
+            previews = listOf(componentTagged(group = "My", name = "Widget", key = "broken")),
             previewWrappers = PreviewWrappers.Enabled(),
         )
-        val factory = wrapperFactoryWith("broken" to WrapperResolution.Failed("the wrapper class is abstract"))
+        val factory = resolutionsOf("broken" to WrapperResolution.Failed("the wrapper class is abstract"))
 
         val message = shouldThrow<SnapshotConfigException> {
             SnapshotResolver(wrapperResolverFactory = factory).resolve(config)
@@ -150,7 +148,7 @@ internal class SnapshotResolverValidationTest : FunSpec({
             ),
             previewWrappers = PreviewWrappers.Enabled(),
         )
-        val factory = wrapperFactoryWith("broken" to WrapperResolution.Failed("the wrapper class is abstract"))
+        val factory = resolutionsOf("broken" to WrapperResolution.Failed("the wrapper class is abstract"))
 
         val message = shouldThrow<SnapshotConfigException> {
             SnapshotResolver(wrapperResolverFactory = factory).resolve(config)
