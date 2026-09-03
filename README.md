@@ -35,6 +35,7 @@ The framework is designed with extensibility in mind, using a modular architectu
 - Font scale testing
 - Per-preview exceptions without touching the library: inline `extraMetadata` tokens and named `profile`s (narrow **or** widen a single axis for one
   preview), plus a standing `exclude` predicate for axis couplings
+- Automatic androidx `@PreviewWrapper` support, including wrappers inherited from custom preview annotations
 - Fail-fast validation: untagged, over-restricted or name-colliding previews throw `SnapshotConfigException` at test-class construction
 - Integration with popular testing tools:
     - Paparazzi for snapshot generation
@@ -79,6 +80,10 @@ ksp(libs.showkase.processor)
 
 > `framework` depends on `annotations`, and `paparazzi` depends on `framework`. The BOM pins a
 > compatible set of all three, so you never specify their versions explicitly.
+
+> `framework` applies androidx `@PreviewWrapper` automatically, which requires **Compose BOM 2026.08.00**
+> (`androidx.compose.ui:ui-tooling-preview` 1.12.0) on your unit-test classpath. See
+> [Preview wrappers](#preview-wrappers).
 
 ### Paparazzi
 If you use `paparazzi` artifact, you will need the following additional configuration:
@@ -217,6 +222,7 @@ The DSL surface:
 | `decorate { uiMode, content -> }` | config | yes | Wrapper around every preview (your theme), keyed off the `UiMode`. |
 | `before { context -> }` | config | no | Setup before each snapshot, given the prepared `Context`. |
 | `variants { }` | config | yes | Declares the matrix. |
+| `previewWrappers(PreviewWrappers)` | config | no | How androidx `@PreviewWrapper` is handled (default: `Enabled()`, see below). |
 | `components()` | variants | — | Enable Component-tagged previews. |
 | `screens(vararg DeviceConfig)` | variants | — | Enable Screen-tagged previews on the given devices. |
 | `uiModes(vararg UiMode)` | variants | yes (≥1) | UI modes every preview is rendered in. |
@@ -305,6 +311,86 @@ class SampleSnapshotTests : PaparazziSnapshotTests({
 A profile body (`ProfileOverrideScope`) may override any subset of `devices(...)`, `uiModes(...)`, `fontScales(...)`; axes it leaves unset fall through
 to the class config. A preview may reference **at most one** profile, but may still add inline tokens on top of it — an inline token wins over the
 profile on the same axis.
+
+### Preview wrappers
+
+androidx's `@PreviewWrapper(SomeWrapper::class)` (from `androidx.compose.ui:ui-tooling-preview`) lets a preview declare the composable that should
+wrap it — typically a theme, a locale or a fake dependency provider. Android Studio applies it when rendering the preview, and **so does this
+framework**: no configuration and no change to `decorate { }` are needed. This requires **Compose BOM 2026.08.00** (`ui-tooling-preview` 1.12.0),
+where `@PreviewWrapper` may also be placed on custom preview annotations; 1.11.x targets functions only.
+
+```kotlin
+class FrameWrapper : PreviewWrapperProvider {
+
+    @Composable
+    override fun Wrap(content: @Composable () -> Unit) {
+        Box(modifier = Modifier.border(4.dp, MaterialTheme.colorScheme.primary).padding(8.dp)) { content() }
+    }
+}
+
+@Preview
+@PreviewWrapper(FrameWrapper::class)
+@ShowkaseComposable(name = "ArticleCard", group = "Cards", extraMetadata = [PreviewSnapshotKind.Component])
+@Composable
+fun ArticleCardPreview() { ArticleCard(title = "Wrapped", body = "…") }
+```
+
+The wrapper is applied **innermost** — the composition is `decorate → font-scale density → Wrap → preview` — so your theme still sits
+outside it and a wrapper reading `MaterialTheme.colorScheme` follows the UI-mode axis. A fresh wrapper instance is created for every snapshot,
+exactly as Studio does per render.
+
+`@PreviewWrapper` on a **custom preview annotation** is inherited by every preview using it, following nested annotations recursively:
+
+```kotlin
+@PreviewWrapper(FrameWrapper::class)
+annotation class FramedPreview
+
+@Preview
+@FramedPreview // the preview is wrapped in FrameWrapper
+@ShowkaseComposable(name = "PriceTag", group = "Cards", extraMetadata = [PreviewSnapshotKind.Component])
+@Composable
+fun PriceTagPreview() { PriceTag(price = "$19.99") }
+```
+
+A `@PreviewWrapper` **on the function wins** over one inherited from an annotation; two *different* inherited wrappers are a configuration error
+(declare the wrapper on the function to resolve it).
+
+Because the annotation has `BINARY` retention it is invisible to reflection, so the framework reads it from the compiled class files at test-class
+construction, mapping each Showkase component back to its preview function. Resolution is **strict**: any preview it cannot map — annotated or
+not — and any unusable wrapper class (not on the test classpath, not a `PreviewWrapperProvider`, abstract, or without a public zero-argument
+constructor) throws `SnapshotConfigException` naming the preview and the problem.
+
+`previewWrappers(...)` configures the whole mechanism:
+
+```kotlin
+class SampleSnapshotTests : PaparazziSnapshotTests({
+    previews(Showkase.getMetadata())
+    decorate { uiMode, content -> SnapshotsSampleTheme(darkTheme = uiMode == UiMode.DARK) { content() } }
+
+    // Ignore @PreviewWrapper entirely — annotated previews render unwrapped:
+    previewWrappers(PreviewWrappers.Disabled)
+
+    // …or keep it on and help the mapper with the previews it cannot follow:
+    previewWrappers(
+        PreviewWrappers.Enabled { component ->
+            if (component.componentName == "Exotic") PreviewFunction("com.app.ui.PreviewsKt", "ExoticPreview") else null
+        },
+    )
+
+    variants { components(); uiModes(UiMode.LIGHT, UiMode.DARK); fontScales(FontScale.NORMAL) }
+})
+```
+
+`locate` is consulted once per preview before the automatic mapping; returning `null` falls through to it, and a returned `PreviewFunction` (JVM
+binary class name + Kotlin function name) is used as the declaration site whose annotations are read. The last `previewWrappers(...)` call wins.
+
+**Troubleshooting**
+
+- *"no generated Showkase host could be found for componentKey …"* / *"the generated Showkase host(s) … contain no call to function …"* — the
+  mapping from the Showkase component back to its preview function failed, so the annotation could not be read. Point the framework at the
+  declaration site with `previewWrappers(PreviewWrappers.Enabled { … })`, or turn it off with `previewWrappers(PreviewWrappers.Disabled)`.
+- *"class … has class file major version …, which the bundled ASM cannot read"* — your class files are newer than the bundled ASM supports.
+  Add a newer `org.ow2.asm:asm` test dependency (Gradle resolves to the highest version), or use `previewWrappers(PreviewWrappers.Disabled)`.
 
 ### Scoping previews
 

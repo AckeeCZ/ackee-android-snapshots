@@ -13,6 +13,7 @@ object PreviewGroup {
     const val OverrideWidening = "OverrideWidening"
     const val Precedence = "Precedence"
     const val AllLevels = "AllLevels"
+    const val PreviewWrapper = "PreviewWrapper"
 }
 
 /**
