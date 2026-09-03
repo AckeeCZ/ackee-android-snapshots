@@ -10,6 +10,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
@@ -41,7 +42,7 @@ class BadgeWrapper : PreviewWrapperProvider {
         LabelledFrame(
             label = "BadgeWrapper",
             shape = RoundedCornerShape(16.dp),
-            tertiary = true,
+            color = MaterialTheme.colorScheme.tertiary,
             content = content,
         )
     }
@@ -51,10 +52,9 @@ class BadgeWrapper : PreviewWrapperProvider {
 private fun LabelledFrame(
     label: String,
     shape: Shape,
-    tertiary: Boolean = false,
+    color: Color = MaterialTheme.colorScheme.primary,
     content: @Composable () -> Unit,
 ) {
-    val color = if (tertiary) MaterialTheme.colorScheme.tertiary else MaterialTheme.colorScheme.primary
     Column {
         Text(text = label, style = MaterialTheme.typography.labelSmall, color = color)
         Box(
