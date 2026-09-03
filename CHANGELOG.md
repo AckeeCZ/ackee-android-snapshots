@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project adheres
 to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## BOM [3.2.0-paparazzialpha05] - 2026-09-03
+## BOM [3.2.0-paparazzialpha05] - TBD
 
 Adds support for androidx's `@PreviewWrapper`: a preview that declares a `PreviewWrapperProvider` —
 directly or through a custom preview annotation — is now snapshot wrapped exactly as Android Studio
@@ -16,9 +16,8 @@ unchanged and is not re-released.
 > **1.12.0**), where `@PreviewWrapper` may also be placed on custom preview annotations — 1.11.x
 > declares the annotation but targets functions only. `framework` depends on the Compose BOM itself, so
 > the whole 2026.08.00 platform (Material3 1.4.0 included) reaches your unit-test classpath
-> transitively. Re-record your goldens afterwards (`./gradlew cleanRecordPaparazziDebug`); the newer
-> Compose renders some pixels differently. Nothing else about the API changed, and previews without
-> `@PreviewWrapper` render exactly as before.
+> transitively. Nothing else about the API changed, and previews without `@PreviewWrapper` render
+> exactly as before.
 
 ### framework
 - Added automatic `@PreviewWrapper` support. The wrapper is resolved once per preview at test-class
@@ -44,11 +43,6 @@ unchanged and is not re-released.
 
 ### annotations
 - No changes; stays at `3.1.0`.
-
-### build & tooling (internal)
-- Bumped Compose BOM `2026.06.01` → `2026.08.00` (Compose UI 1.12.0, Material3 1.4.0) and re-recorded the
-  sample goldens. Added `:sample` previews and goldens covering wrapped, inherited-wrapper, `internal`,
-  `object`-nested and `@PreviewParameter` previews.
 
 ## BOM [3.1.0-paparazzialpha05] - 2026-07-10
 
