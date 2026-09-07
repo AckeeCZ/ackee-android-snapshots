@@ -1,7 +1,11 @@
 package io.github.ackeecz.snapshots.framework
 
+import io.github.ackeecz.snapshots.framework.wrapper.FakePreviewWrapperResolver
+import io.github.ackeecz.snapshots.framework.wrapper.RecordingWrapperResolverFactory
+import io.github.ackeecz.snapshots.framework.wrapper.WrapperResolution
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.FunSpec
+import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
 import io.kotest.matchers.string.shouldNotContain
 
@@ -102,5 +106,56 @@ internal class SnapshotResolverValidationTest : FunSpec({
 
     test("the duplicate-name error names the colliding tests") {
         resolveErrorMessage(collidingConfig) shouldContain "A_B_0_LIGHT_FontScale-NORMAL"
+    }
+
+    test("wrapper resolution is skipped for a preview without a kind tag") {
+        val resolver = FakePreviewWrapperResolver()
+        val config = snapshotConfig(
+            previews = listOf(
+                componentTagged(group = "Good", name = "One", key = "tagged"),
+                previewComponent(group = "Bad", name = "Two", key = "untagged"),
+            ),
+            previewWrappers = PreviewWrappers.Enabled(),
+        )
+
+        shouldThrow<SnapshotConfigException> {
+            SnapshotResolver(wrapperResolverFactory = RecordingWrapperResolverFactory(resolver)).resolve(config)
+        }
+
+        resolver.resolvedKeys shouldBe listOf("tagged")
+    }
+
+    test("a Failed resolution throws naming the preview id and the reason") {
+        val config = snapshotConfig(
+            previews = listOf(componentTagged(group = "My", name = "Widget", key = "broken")),
+            previewWrappers = PreviewWrappers.Enabled(),
+        )
+        val factory = resolutionsOf("broken" to WrapperResolution.Failed("the wrapper class is abstract"))
+
+        val message = shouldThrow<SnapshotConfigException> {
+            SnapshotResolver(wrapperResolverFactory = factory).resolve(config)
+        }.message ?: ""
+
+        message shouldContain "My_Widget"
+        message shouldContain "the wrapper class is abstract"
+    }
+
+    test("wrapper failures aggregate with other preview errors in one exception") {
+        val config = snapshotConfig(
+            previews = listOf(
+                componentTagged(group = "Broken", name = "One", key = "broken"),
+                previewComponent(group = "Untagged", name = "Two", key = "untagged"),
+            ),
+            previewWrappers = PreviewWrappers.Enabled(),
+        )
+        val factory = resolutionsOf("broken" to WrapperResolution.Failed("the wrapper class is abstract"))
+
+        val message = shouldThrow<SnapshotConfigException> {
+            SnapshotResolver(wrapperResolverFactory = factory).resolve(config)
+        }.message ?: ""
+
+        message shouldContain "Broken_One"
+        message shouldContain "the wrapper class is abstract"
+        message shouldContain "Untagged_Two"
     }
 })

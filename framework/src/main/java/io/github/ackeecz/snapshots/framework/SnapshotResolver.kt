@@ -1,12 +1,20 @@
 package io.github.ackeecz.snapshots.framework
 
-internal class SnapshotResolver {
+import io.github.ackeecz.snapshots.framework.wrapper.BytecodePreviewWrapperResolver
+import io.github.ackeecz.snapshots.framework.wrapper.PreviewWrapperResolver
+import io.github.ackeecz.snapshots.framework.wrapper.WrapperResolution
+
+internal class SnapshotResolver(
+    private val wrapperResolverFactory: (PreviewWrappers.Enabled) -> PreviewWrapperResolver =
+        ::BytecodePreviewWrapperResolver,
+) {
 
     private val previewIdentifier = PreviewIdentifier()
     private val extraMetadataParser = ExtraMetadataParser()
 
     fun resolve(config: SnapshotConfig): List<ResolvedSnapshot> {
         val errors = mutableListOf<String>()
+        val wrapperResolver = (config.previewWrappers as? PreviewWrappers.Enabled)?.let(wrapperResolverFactory)
         val resolvedSnapshots = previewIdentifier.assignIds(config.previews).flatMap { preview ->
             val parsedMetadata = extraMetadataParser.parse(preview.component.extraMetadata, config.profiles.keys)
             if (parsedMetadata.kind == null) {
@@ -21,11 +29,20 @@ internal class SnapshotResolver {
                 return@flatMap emptyList()
             }
 
+            val wrapper = when (val resolution = wrapperResolver?.resolve(preview.component)) {
+                is WrapperResolution.Wrapped -> resolution.factory
+                is WrapperResolution.Failed -> {
+                    errors += "Preview '${preview.id}' ${resolution.reason}"
+                    null
+                }
+                WrapperResolution.Unwrapped, null -> null
+            }
             variants.map { variant ->
                 ResolvedSnapshot(
                     name = variantName(preview.id, variant),
                     variant = variant,
                     content = preview.component.component,
+                    wrapper = wrapper,
                 )
             }
         }

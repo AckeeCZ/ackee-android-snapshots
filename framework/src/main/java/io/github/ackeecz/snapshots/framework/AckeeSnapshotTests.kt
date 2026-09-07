@@ -24,12 +24,13 @@ import io.kotest.core.spec.style.FunSpec
  * `PaparazziSnapshotTests` in the `:paparazzi` module is the ready-to-use, Paparazzi-backed subclass.
  */
 @ExperimentalSnapshotsApi
-abstract class AckeeSnapshotTests(
+abstract class AckeeSnapshotTests internal constructor(
     engineFactory: () -> SnapshotEngine,
     config: SnapshotConfigScope.() -> Unit,
+    resolver: SnapshotResolver,
 ) : FunSpec({
     val snapshotConfig = SnapshotConfigScopeImpl().apply(config).build()
-    val resolved = SnapshotResolver().resolve(snapshotConfig)
+    val resolved = resolver.resolve(snapshotConfig)
     resolved.groupBy { Triple(it.variant.kind, it.variant.device, it.variant.uiMode) }.forEach { (group, snapshots) ->
         val (kind, device, uiMode) = group
         context("${snapshotTargetLabel(device)}_$uiMode") {
@@ -47,7 +48,13 @@ abstract class AckeeSnapshotTests(
             }
         }
     }
-})
+}) {
+
+    constructor(
+        engineFactory: () -> SnapshotEngine,
+        config: SnapshotConfigScope.() -> Unit,
+    ) : this(engineFactory, config, SnapshotResolver())
+}
 
 private fun takeSnapshot(
     snapshotConfig: SnapshotConfig,
@@ -61,6 +68,9 @@ private fun takeSnapshot(
     if (snapshotConfig.before !== NO_OP_BEFORE) {
         snapshotConfig.before(engine.context)
     }
+    // A fresh wrapper per snapshot, mirroring Studio's per-render instantiation. It is created outside the
+    // composable lambda so instantiation failures surface as the test's failure, not as a composition error.
+    val wrapper = snapshot.wrapper?.create()
     engine.snapshot(snapshot.name) {
         snapshotConfig.decorate(uiMode) {
             CompositionLocalProvider(
@@ -69,7 +79,11 @@ private fun takeSnapshot(
                     fontScale = snapshot.variant.fontScale.scale,
                 ),
             ) {
-                snapshot.content()
+                if (wrapper == null) {
+                    snapshot.content()
+                } else {
+                    wrapper.Wrap { snapshot.content() }
+                }
             }
         }
     }

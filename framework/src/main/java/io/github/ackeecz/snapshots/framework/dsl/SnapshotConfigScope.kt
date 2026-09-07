@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.compose.runtime.Composable
 import com.airbnb.android.showkase.models.ShowkaseElementsMetadata
 import io.github.ackeecz.snapshots.annotations.ExperimentalSnapshotsApi
+import io.github.ackeecz.snapshots.framework.PreviewWrappers
 import io.github.ackeecz.snapshots.framework.UiMode
 
 /**
@@ -29,6 +30,12 @@ interface SnapshotConfigScope {
      * would otherwise be ignored.
      */
     fun decorate(block: @Composable (UiMode, @Composable () -> Unit) -> Unit)
+
+    /**
+     * Optional. Configures how androidx's `@PreviewWrapper` is handled on the discovered previews; defaults to
+     * [PreviewWrappers.Enabled] without a locator. The last call wins.
+     */
+    fun previewWrappers(wrappers: PreviewWrappers)
 
     /** Declares the variant matrix — kinds, devices, UI modes, font scales, excludes and profiles. Required. */
     fun variants(block: VariantsScope.() -> Unit)

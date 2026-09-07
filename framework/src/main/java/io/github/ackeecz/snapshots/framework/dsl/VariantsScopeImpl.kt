@@ -5,6 +5,7 @@ import androidx.compose.runtime.Composable
 import com.airbnb.android.showkase.models.ShowkaseBrowserComponent
 import io.github.ackeecz.snapshots.framework.DeviceConfig
 import io.github.ackeecz.snapshots.framework.FontScale
+import io.github.ackeecz.snapshots.framework.PreviewWrappers
 import io.github.ackeecz.snapshots.framework.ProfileOverride
 import io.github.ackeecz.snapshots.framework.SnapshotConfig
 import io.github.ackeecz.snapshots.framework.SnapshotConfigException
@@ -48,6 +49,7 @@ internal class VariantsScopeImpl : VariantsScope {
         previews: List<ShowkaseBrowserComponent>,
         before: (Context) -> Unit,
         decorate: @Composable (UiMode, @Composable () -> Unit) -> Unit,
+        previewWrappers: PreviewWrappers,
     ): SnapshotConfig {
         val uiModes = uiModes.required(axis = "uiModes")
         val fontScales = fontScales.required(axis = "fontScales")
@@ -61,6 +63,7 @@ internal class VariantsScopeImpl : VariantsScope {
             profiles = profiles.toMap(),
             before = before,
             decorate = decorate,
+            previewWrappers = previewWrappers,
         )
     }
 

@@ -22,6 +22,9 @@ dependencies {
 
     implementation(platform(libs.compose.bom))
     implementation(libs.compose.ui)
+    implementation(libs.compose.ui.tooling.preview)
+
+    implementation(libs.asm)
 
     implementation(libs.kotest.runner.junit5)
 

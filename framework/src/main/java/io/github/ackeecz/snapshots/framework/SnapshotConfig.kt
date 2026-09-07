@@ -20,6 +20,7 @@ internal data class SnapshotConfig(
     val profiles: Map<String, ProfileOverride> = emptyMap(),
     val before: (Context) -> Unit = NO_OP_BEFORE,
     val decorate: @Composable (UiMode, @Composable () -> Unit) -> Unit = PASSTHROUGH_DECORATE,
+    val previewWrappers: PreviewWrappers = PreviewWrappers.Enabled(),
 )
 
 /**

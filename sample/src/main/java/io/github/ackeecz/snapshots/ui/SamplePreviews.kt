@@ -3,6 +3,8 @@ package io.github.ackeecz.snapshots.ui
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.tooling.preview.PreviewWrapper
 import com.airbnb.android.showkase.annotation.ShowkaseComposable
 import io.github.ackeecz.snapshots.annotations.PreviewDevice
 import io.github.ackeecz.snapshots.annotations.PreviewFontScale
@@ -19,6 +21,10 @@ import io.github.ackeecz.snapshots.ui.screens.PricingScreen
 import io.github.ackeecz.snapshots.ui.screens.ProfileScreen
 import io.github.ackeecz.snapshots.ui.screens.SettingsScreen
 import io.github.ackeecz.snapshots.ui.screens.WelcomeScreen
+import io.github.ackeecz.snapshots.ui.wrapper.BadgeWrapper
+import io.github.ackeecz.snapshots.ui.wrapper.FrameWrapper
+import io.github.ackeecz.snapshots.ui.wrapper.FramedPreview
+import io.github.ackeecz.snapshots.ui.wrapper.WrapperLabelProvider
 
 /**
  * All Showkase snapshot preview entry points, grouped by the test concern they feed (see [PreviewGroup]).
@@ -247,6 +253,67 @@ fun InlineBeatsProfilePreview() {
 @Composable
 fun AllLevelsScreenPreview() {
     PricingScreen()
+}
+
+// endregion
+
+// region PreviewWrapper — androidx `@PreviewWrapper` applied automatically, plus controls proving the mapper.
+
+@Preview
+@PreviewWrapper(FrameWrapper::class)
+@ShowkaseComposable(name = "FrameWrapped", group = PreviewGroup.PreviewWrapper, extraMetadata = [PreviewSnapshotKind.Component])
+@Composable
+fun FrameWrappedComponentPreview() {
+    ArticleCard(title = "Wrapped", body = "The wrapper frame is applied by the framework, innermost around the preview.")
+}
+
+@Preview
+@PreviewWrapper(BadgeWrapper::class)
+@ShowkaseComposable(name = "BadgeWrapped", group = PreviewGroup.PreviewWrapper, extraMetadata = [PreviewSnapshotKind.Component])
+@Composable
+internal fun BadgeWrappedComponentPreview() {
+    StatusBadge(text = "Active")
+}
+
+@Preview
+@FramedPreview
+@ShowkaseComposable(name = "MultipreviewWrapped", group = PreviewGroup.PreviewWrapper, extraMetadata = [PreviewSnapshotKind.Component])
+@Composable
+fun MultipreviewWrappedComponentPreview() {
+    PriceTag(price = "$19.99")
+}
+
+@Preview
+@ShowkaseComposable(name = "UnwrappedControl", group = PreviewGroup.PreviewWrapper, extraMetadata = [PreviewSnapshotKind.Component])
+@Composable
+fun UnwrappedControlPreview() {
+    ThemedChip(label = "Unwrapped")
+}
+
+/** Shape control: an unannotated preview declared inside an `object`, proving the Showkase mapper follows enclosed previews. */
+object WrapperShapePreviews {
+
+    @Preview
+    @ShowkaseComposable(
+        name = "ObjectNested",
+        group = PreviewGroup.PreviewWrapper,
+        extraMetadata = [PreviewSnapshotKind.Component, PreviewUiMode.Light],
+    )
+    @Composable
+    fun ObjectNestedPreview() {
+        Avatar(color = Color(0xFF7D5260))
+    }
+}
+
+@Preview
+@ShowkaseComposable(
+    name = "Parameterized",
+    group = PreviewGroup.PreviewWrapper,
+    extraMetadata = [PreviewSnapshotKind.Component, PreviewUiMode.Light],
+)
+@Composable
+fun ParameterizedControlPreview(@PreviewParameter(WrapperLabelProvider::class) label: String) {
+    PromoBanner(text = "Promo $label")
 }
 
 // endregion

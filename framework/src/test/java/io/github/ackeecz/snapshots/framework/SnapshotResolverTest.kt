@@ -1,8 +1,14 @@
 package io.github.ackeecz.snapshots.framework
 
+import com.airbnb.android.showkase.models.ShowkaseBrowserComponent
 import io.github.ackeecz.snapshots.annotations.PreviewDevice
+import io.github.ackeecz.snapshots.framework.wrapper.FakePreviewWrapperFactory
+import io.github.ackeecz.snapshots.framework.wrapper.FakePreviewWrapperResolver
+import io.github.ackeecz.snapshots.framework.wrapper.RecordingWrapperResolverFactory
+import io.github.ackeecz.snapshots.framework.wrapper.WrapperResolution
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
+import io.kotest.matchers.shouldBe
 
 private val PIXEL_PORTRAIT = Device.Pixel6.portrait
 private val NEXUS_LANDSCAPE = Device.Nexus10.landscape
@@ -247,5 +253,81 @@ internal class SnapshotResolverTest : FunSpec({
         resolvedVariants(config) shouldContainExactlyInAnyOrder listOf(
             screen(NEXUS_LANDSCAPE, UiMode.LIGHT, FontScale.NORMAL),
         )
+    }
+
+    context("wrapper resolutions attach to resolved snapshots") {
+
+        val wrapperFactory = FakePreviewWrapperFactory()
+
+        fun wrapperConfig(
+            previews: List<ShowkaseBrowserComponent>,
+            previewWrappers: PreviewWrappers = PreviewWrappers.Enabled(),
+        ) = snapshotConfig(previews = previews, uiModes = bothModes, previewWrappers = previewWrappers)
+
+        fun resolveWith(
+            resolverFactory: RecordingWrapperResolverFactory,
+            config: SnapshotConfig,
+        ): List<ResolvedSnapshot> = SnapshotResolver(wrapperResolverFactory = resolverFactory).resolve(config)
+
+        test("a Wrapped resolution attaches its factory to every variant of that preview") {
+            val config = wrapperConfig(listOf(componentTagged(key = "p1")))
+
+            val wrappers = resolveWith(resolutionsOf("p1" to WrapperResolution.Wrapped(wrapperFactory)), config).map { it.wrapper }
+
+            wrappers shouldBe listOf(wrapperFactory, wrapperFactory)
+        }
+
+        test("an Unwrapped resolution leaves wrapper null") {
+            val config = wrapperConfig(listOf(componentTagged(key = "p1")))
+
+            val wrappers = resolveWith(resolutionsOf("p1" to WrapperResolution.Unwrapped), config).map { it.wrapper }
+
+            wrappers shouldBe listOf(null, null)
+        }
+
+        test("previews are resolved independently") {
+            val config = wrapperConfig(
+                listOf(componentTagged(name = "Wrapped", key = "p1"), componentTagged(name = "Plain", key = "p2")),
+            )
+            val factory = resolutionsOf("p1" to WrapperResolution.Wrapped(wrapperFactory), "p2" to WrapperResolution.Unwrapped)
+
+            val byId = resolveWith(factory, config).associate { it.name to it.wrapper }
+
+            byId.filterKeys { it.startsWith("Group_Wrapped") }.values.toSet() shouldBe setOf(wrapperFactory)
+            byId.filterKeys { it.startsWith("Group_Plain") }.values.toSet() shouldBe setOf(null)
+        }
+
+        test("the wrapper resolver is consulted once per preview, not per variant") {
+            val resolver = FakePreviewWrapperResolver()
+            val config = wrapperConfig(listOf(componentTagged(key = "p1")))
+
+            resolveWith(RecordingWrapperResolverFactory(resolver), config)
+
+            resolver.resolvedKeys shouldBe listOf("p1")
+        }
+
+        test("the resolver factory receives the configured Enabled settings") {
+            val enabled = PreviewWrappers.Enabled { null }
+            val factory = RecordingWrapperResolverFactory()
+
+            resolveWith(factory, wrapperConfig(listOf(componentTagged(key = "p1")), previewWrappers = enabled))
+
+            factory.receivedSettings shouldBe listOf(enabled)
+        }
+
+        test("Disabled never constructs a wrapper resolver") {
+            val factory = RecordingWrapperResolverFactory()
+
+            resolveWith(factory, wrapperConfig(listOf(componentTagged(key = "p1")), previewWrappers = PreviewWrappers.Disabled))
+
+            factory.receivedSettings shouldBe emptyList()
+        }
+
+        test("Disabled leaves every wrapper null") {
+            val config = wrapperConfig(listOf(componentTagged(key = "p1")), previewWrappers = PreviewWrappers.Disabled)
+            val factory = resolutionsOf("p1" to WrapperResolution.Wrapped(wrapperFactory))
+
+            resolveWith(factory, config).map { it.wrapper } shouldBe listOf(null, null)
+        }
     }
 })

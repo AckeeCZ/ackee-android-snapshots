@@ -3,6 +3,9 @@ package io.github.ackeecz.snapshots.framework
 import com.airbnb.android.showkase.models.ShowkaseBrowserComponent
 import com.airbnb.android.showkase.models.ShowkaseElementsMetadata
 import io.github.ackeecz.snapshots.annotations.PreviewSnapshotKind
+import io.github.ackeecz.snapshots.framework.wrapper.FakePreviewWrapperResolver
+import io.github.ackeecz.snapshots.framework.wrapper.RecordingWrapperResolverFactory
+import io.github.ackeecz.snapshots.framework.wrapper.WrapperResolution
 
 internal fun metadataOf(vararg components: ShowkaseBrowserComponent) =
     ShowkaseElementsMetadata(componentList = components.toList())
@@ -12,12 +15,14 @@ internal fun previewComponent(
     name: String = "Preview",
     key: String = "$group:$name",
     extraMetadata: List<String> = emptyList(),
+    styleName: String? = null,
 ) = ShowkaseBrowserComponent(
     componentKey = key,
     group = group,
     componentName = name,
     componentKDoc = "",
     component = {},
+    styleName = styleName,
     extraMetadata = extraMetadata,
 )
 
@@ -46,6 +51,7 @@ internal fun snapshotConfig(
     fontScales: List<FontScale> = listOf(FontScale.NORMAL),
     excludes: List<(SnapshotVariant) -> Boolean> = emptyList(),
     profiles: Map<String, ProfileOverride> = emptyMap(),
+    previewWrappers: PreviewWrappers = PreviewWrappers.Disabled,
 ) = SnapshotConfig(
     previews = previews,
     componentsEnabled = componentsEnabled,
@@ -54,4 +60,9 @@ internal fun snapshotConfig(
     fontScales = fontScales,
     excludes = excludes,
     profiles = profiles,
+    previewWrappers = previewWrappers,
 )
+
+/** A [RecordingWrapperResolverFactory] whose resolver serves the given `componentKey` -> [WrapperResolution] map. */
+internal fun resolutionsOf(vararg resolutions: Pair<String, WrapperResolution>) =
+    RecordingWrapperResolverFactory(FakePreviewWrapperResolver(mapOf(*resolutions)))
