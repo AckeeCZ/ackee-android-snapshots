@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project adheres
 to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## BOM [3.2.0-paparazzialpha05] - TBD
+## BOM [3.2.0-paparazzialpha05] - 2026-09-07
 
 Adds support for androidx's `@PreviewWrapper`: a preview that declares a `PreviewWrapperProvider` —
 directly or through a custom preview annotation — is now snapshot wrapped exactly as Android Studio
