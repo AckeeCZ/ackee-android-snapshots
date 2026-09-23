@@ -60,6 +60,8 @@ internal class ExtraMetadataParserTest : FunSpec({
         parse(PreviewDevice.Pixel6Landscape).inlineDevices shouldBe setOf(Device.Pixel6.landscape)
         parse(PreviewDevice.Nexus10Portrait).inlineDevices shouldBe setOf(Device.Nexus10.portrait)
         parse(PreviewDevice.Nexus10Landscape).inlineDevices shouldBe setOf(Device.Nexus10.landscape)
+        parse(PreviewDevice.Pixel9ProFoldPortrait).inlineDevices shouldBe setOf(Device.Pixel9ProFold.portrait)
+        parse(PreviewDevice.Pixel9ProFoldLandscape).inlineDevices shouldBe setOf(Device.Pixel9ProFold.landscape)
     }
 
     test("multiple device tokens yield the set") {

@@ -5,6 +5,24 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project adheres
 to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## Unreleased
+
+Adds the Pixel 9 Pro Fold's unfolded inner display as a snapshot device. An unfolded foldable is wider
+than Material's Expanded breakpoint (840dp) but much narrower than a tablet in landscape, so a layout
+that branches on width can behave differently there than on either device already offered.
+
+### annotations
+- Added the `PreviewDevice.Pixel9ProFoldPortrait` / `PreviewDevice.Pixel9ProFoldLandscape` inline
+  override tokens.
+
+### framework
+- Added `Device.PIXEL_9_PRO_FOLD` with the `Device.Pixel9ProFold.portrait` / `.landscape` `DeviceConfig`
+  shortcuts, and mapped the new inline tokens to them. The snapshot-name label is `Pixel9ProFold`.
+
+### paparazzi
+- Mapped `Device.PIXEL_9_PRO_FOLD` to Paparazzi's own `PIXEL_9_PRO_FOLD` device (2076x2152px at 390dpi,
+  i.e. 852x883dp).
+
 ## BOM [3.2.0-paparazzialpha05] - 2026-09-07
 
 Adds support for androidx's `@PreviewWrapper`: a preview that declares a `PreviewWrapperProvider` —

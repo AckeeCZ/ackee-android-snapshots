@@ -42,6 +42,11 @@ class PaparazziMappingTest : FunSpec({
             renderConfigFor(SnapshotKind.Screen, device).deviceConfig shouldBe
                 PaparazziDeviceConfig.NEXUS_10.copy(orientation = ScreenOrientation.PORTRAIT)
         }
+        test("a Pixel 9 Pro Fold screen maps to the unfolded fold device") {
+            val device = DeviceConfig(Device.PIXEL_9_PRO_FOLD, DeviceOrientation.PORTRAIT)
+            renderConfigFor(SnapshotKind.Screen, device).deviceConfig shouldBe
+                PaparazziDeviceConfig.PIXEL_9_PRO_FOLD.copy(orientation = ScreenOrientation.PORTRAIT)
+        }
         test("Screen orientation is applied to the device config") {
             val device = DeviceConfig(Device.PIXEL_6, DeviceOrientation.LANDSCAPE)
             renderConfigFor(SnapshotKind.Screen, device).deviceConfig.orientation shouldBe ScreenOrientation.LANDSCAPE
