@@ -1,6 +1,7 @@
 package io.github.ackeecz.snapshots.framework
 
 import io.kotest.core.spec.style.FunSpec
+import io.kotest.inspectors.forAll
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldNotContain
 
@@ -26,7 +27,7 @@ internal class DeviceShortcutTest : FunSpec({
 
     test("every device has a snapshot-name label that is unique and free of underscores") {
         val labels = Device.entries.map { DeviceConfig(it, DeviceOrientation.PORTRAIT).name }
-        labels.forEach { it shouldNotContain "_" }
+        labels.forAll { it shouldNotContain "_" }
         labels shouldBe labels.distinct()
     }
 })
