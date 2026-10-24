@@ -18,6 +18,7 @@ internal val Device.label: String
     get() = when (this) {
         Device.PIXEL_6 -> "Pixel6"
         Device.NEXUS_10 -> "Nexus10"
+        Device.PIXEL_9_PRO_FOLD -> "Pixel9ProFold"
     }
 
 internal val DeviceOrientation.label: String
@@ -31,7 +32,10 @@ enum class Device {
     PIXEL_6,
 
     // tablets
-    NEXUS_10;
+    NEXUS_10,
+
+    // foldables — unfolded inner display
+    PIXEL_9_PRO_FOLD;
 
     /** Ready-made [DeviceConfig] shortcuts for the Pixel 6 phone. */
     object Pixel6 {
@@ -51,6 +55,20 @@ enum class Device {
 
         /** Nexus 10 in landscape orientation. */
         val landscape: DeviceConfig = DeviceConfig(device = NEXUS_10, orientation = DeviceOrientation.LANDSCAPE)
+    }
+
+    /**
+     * Ready-made [DeviceConfig] shortcuts for the Pixel 9 Pro Fold's unfolded inner display
+     * (852x883dp). Both orientations sit between the tablet and phone widths, which is the band a
+     * layout driven by width breakpoints is most likely to get wrong.
+     */
+    object Pixel9ProFold {
+
+        /** Pixel 9 Pro Fold, unfolded, in portrait orientation. */
+        val portrait: DeviceConfig = DeviceConfig(device = PIXEL_9_PRO_FOLD, orientation = DeviceOrientation.PORTRAIT)
+
+        /** Pixel 9 Pro Fold, unfolded, in landscape orientation. */
+        val landscape: DeviceConfig = DeviceConfig(device = PIXEL_9_PRO_FOLD, orientation = DeviceOrientation.LANDSCAPE)
     }
 }
 

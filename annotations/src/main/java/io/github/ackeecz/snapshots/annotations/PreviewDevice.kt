@@ -11,4 +11,6 @@ object PreviewDevice {
     const val Pixel6Landscape = "device=PIXEL_6_LANDSCAPE"
     const val Nexus10Portrait = "device=NEXUS_10_PORTRAIT"
     const val Nexus10Landscape = "device=NEXUS_10_LANDSCAPE"
+    const val Pixel9ProFoldPortrait = "device=PIXEL_9_PRO_FOLD_PORTRAIT"
+    const val Pixel9ProFoldLandscape = "device=PIXEL_9_PRO_FOLD_LANDSCAPE"
 }

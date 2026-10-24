@@ -40,6 +40,8 @@ internal class ExtraMetadataParser {
         PreviewDevice.Pixel6Landscape to Device.Pixel6.landscape,
         PreviewDevice.Nexus10Portrait to Device.Nexus10.portrait,
         PreviewDevice.Nexus10Landscape to Device.Nexus10.landscape,
+        PreviewDevice.Pixel9ProFoldPortrait to Device.Pixel9ProFold.portrait,
+        PreviewDevice.Pixel9ProFoldLandscape to Device.Pixel9ProFold.landscape,
     )
 
     fun parse(extraMetadata: List<String>, profileKeys: Set<String>): ParsedMetadata {

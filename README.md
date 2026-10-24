@@ -231,7 +231,11 @@ The DSL surface:
 | `profile(key) { }` | variants | no (0..n) | Define a named per-preview override (see below). |
 
 Ready-made device shortcuts live under the `Device` enum: `Device.Pixel6.portrait`, `Device.Pixel6.landscape`, `Device.Nexus10.portrait`,
-`Device.Nexus10.landscape` — each a `DeviceConfig`.
+`Device.Nexus10.landscape`, `Device.Pixel9ProFold.portrait`, `Device.Pixel9ProFold.landscape` — each a `DeviceConfig`.
+
+`Device.Pixel9ProFold` is the unfolded inner display (852x883dp). It is worth adding when your layout branches on width: an unfolded foldable is
+wider than Material's Expanded breakpoint (840dp) yet far narrower than a tablet in landscape, and it is nearly square, so portrait and landscape
+land on the same side of most breakpoints. That band is where width-driven layouts tend to break first.
 
 ### Excluding coupled cells
 
@@ -276,8 +280,8 @@ fun LoginScreenPreview() { LoginScreen() }
 ```
 
 Available tokens (all in the `annotations` module): `PreviewFontScale.{Small, Normal, Large}`, `PreviewUiMode.{Light, Dark}`,
-`PreviewDevice.{Pixel6Portrait, Pixel6Landscape, Nexus10Portrait, Nexus10Landscape}`. Tagging multiple values of the same axis sets that axis to the
-set (e.g. two `PreviewFontScale` tokens ⇒ both scales).
+`PreviewDevice.{Pixel6Portrait, Pixel6Landscape, Nexus10Portrait, Nexus10Landscape, Pixel9ProFoldPortrait, Pixel9ProFoldLandscape}`. Tagging multiple
+values of the same axis sets that axis to the set (e.g. two `PreviewFontScale` tokens ⇒ both scales).
 
 **Named profiles** — when several previews share the same exception, define it once as a `profile(key)` and reference the `key` from each preview. Keep
 the key in a shared `const` so the tag and the profile can't drift apart:

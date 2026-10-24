@@ -41,8 +41,9 @@ The library is an **engine abstraction over a snapshot backend**.
   - `Component` — rendered at minimal size (Paparazzi `SHRINK`), device-independent.
   - `Screen` — rendered in the full device frame (Paparazzi `NORMAL`), once per configured `DeviceConfig`.
   The device is a **separate axis** (not baked into the kind): enable it via `screens(vararg DeviceConfig)`.
-- **Config model**: `DeviceConfig(Device, DeviceOrientation)`, `Device` (PIXEL_6, NEXUS_10) with
-  `Device.Pixel6`/`Device.Nexus10` `.portrait`/`.landscape` `DeviceConfig` shortcuts, `UiMode`
+- **Config model**: `DeviceConfig(Device, DeviceOrientation)`, `Device` (PIXEL_6, NEXUS_10,
+  PIXEL_9_PRO_FOLD) with `Device.Pixel6`/`Device.Nexus10`/`Device.Pixel9ProFold` `.portrait`/`.landscape`
+  `DeviceConfig` shortcuts, `UiMode`
   (LIGHT/DARK → NightMode), `FontScale`. `SnapshotVariant(kind, device?, uiMode, fontScale)` is the
   resolved coordinate and the `exclude` predicate receiver.
 - **Selection is data, not types**: consumers tag a `@ShowkaseComposable` with

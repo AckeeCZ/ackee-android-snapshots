@@ -33,6 +33,7 @@ internal fun renderConfigFor(kind: SnapshotKind, device: DeviceConfig?): Paparaz
 private fun mapDevice(device: Device): PaparazziDeviceConfig = when (device) {
     Device.PIXEL_6 -> PaparazziDeviceConfig.PIXEL_6
     Device.NEXUS_10 -> PaparazziDeviceConfig.NEXUS_10
+    Device.PIXEL_9_PRO_FOLD -> PaparazziDeviceConfig.PIXEL_9_PRO_FOLD
 }
 
 private fun mapOrientation(orientation: DeviceOrientation): ScreenOrientation = when (orientation) {

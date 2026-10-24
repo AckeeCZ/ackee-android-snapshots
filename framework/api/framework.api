@@ -12,6 +12,7 @@ public final class io/github/ackeecz/snapshots/framework/ComposableSingletons$Sn
 public final class io/github/ackeecz/snapshots/framework/Device : java/lang/Enum {
 	public static final field NEXUS_10 Lio/github/ackeecz/snapshots/framework/Device;
 	public static final field PIXEL_6 Lio/github/ackeecz/snapshots/framework/Device;
+	public static final field PIXEL_9_PRO_FOLD Lio/github/ackeecz/snapshots/framework/Device;
 	public static fun getEntries ()Lkotlin/enums/EnumEntries;
 	public static fun valueOf (Ljava/lang/String;)Lio/github/ackeecz/snapshots/framework/Device;
 	public static fun values ()[Lio/github/ackeecz/snapshots/framework/Device;
@@ -27,6 +28,13 @@ public final class io/github/ackeecz/snapshots/framework/Device$Nexus10 {
 public final class io/github/ackeecz/snapshots/framework/Device$Pixel6 {
 	public static final field $stable I
 	public static final field INSTANCE Lio/github/ackeecz/snapshots/framework/Device$Pixel6;
+	public final fun getLandscape ()Lio/github/ackeecz/snapshots/framework/DeviceConfig;
+	public final fun getPortrait ()Lio/github/ackeecz/snapshots/framework/DeviceConfig;
+}
+
+public final class io/github/ackeecz/snapshots/framework/Device$Pixel9ProFold {
+	public static final field $stable I
+	public static final field INSTANCE Lio/github/ackeecz/snapshots/framework/Device$Pixel9ProFold;
 	public final fun getLandscape ()Lio/github/ackeecz/snapshots/framework/DeviceConfig;
 	public final fun getPortrait ()Lio/github/ackeecz/snapshots/framework/DeviceConfig;
 }
